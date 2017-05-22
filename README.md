@@ -2,7 +2,7 @@
 sauron is an APM (Application Performance Management) tool
 
 
-sauron可以对各种常用框架及常用工
+It was developed to monitor some frameworks and Middleware， like this:
 
 annotation：@TraceClass @TraceMethod
 
