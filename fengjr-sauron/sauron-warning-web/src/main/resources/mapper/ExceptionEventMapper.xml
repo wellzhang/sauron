@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.feng.sauron.warning.dao.ExceptionEventMapper" >
+  <resultMap id="BaseResultMap" type="com.feng.sauron.warning.domain.ExceptionEvent" >
+    <result column="id" property="id" jdbcType="BIGINT" />
+    <result column="app_name" property="appName" jdbcType="VARCHAR" />
+    <result column="method_name" property="methodName" jdbcType="VARCHAR" />
+    <result column="host_name" property="hostName" jdbcType="VARCHAR" />
+    <result column="exception_info" property="exceptionInfo" jdbcType="VARCHAR" />
+    <result column="occur_time" property="occurTime" jdbcType="TIMESTAMP" />
+    <result column="params" property="params" jdbcType="VARCHAR" />
+    <result column="bkchar1" property="bkchar1" jdbcType="VARCHAR" />
+    <result column="bkchar2" property="bkchar2" jdbcType="VARCHAR" />
+    <result column="bknum1" property="bknum1" jdbcType="BIGINT" />
+    <result column="bknum2" property="bknum2" jdbcType="INTEGER" />
+  </resultMap>
+  <insert id="insert" parameterType="com.feng.sauron.warning.domain.ExceptionEvent" >
+   <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+			SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+    insert into tb_exception_event (id, app_name, method_name, 
+      host_name, exception_info, occur_time, 
+      params, bkchar1, bkchar2, 
+      bknum1, bknum2)
+    values (#{id,jdbcType=BIGINT}, #{appName,jdbcType=VARCHAR}, #{methodName,jdbcType=VARCHAR}, 
+      #{hostName,jdbcType=VARCHAR}, #{exceptionInfo,jdbcType=VARCHAR}, #{occurTime,jdbcType=TIMESTAMP}, 
+      #{params,jdbcType=VARCHAR}, #{bkchar1,jdbcType=VARCHAR}, #{bkchar2,jdbcType=VARCHAR}, 
+      #{bknum1,jdbcType=BIGINT}, #{bknum2,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.feng.sauron.warning.domain.ExceptionEvent" >
+   <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+			SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+    insert into tb_exception_event
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="appName != null" >
+        app_name,
+      </if>
+      <if test="methodName != null" >
+        method_name,
+      </if>
+      <if test="hostName != null" >
+        host_name,
+      </if>
+      <if test="exceptionInfo != null" >
+        exception_info,
+      </if>
+      <if test="occurTime != null" >
+        occur_time,
+      </if>
+      <if test="params != null" >
+        params,
+      </if>
+      <if test="bkchar1 != null" >
+        bkchar1,
+      </if>
+      <if test="bkchar2 != null" >
+        bkchar2,
+      </if>
+      <if test="bknum1 != null" >
+        bknum1,
+      </if>
+      <if test="bknum2 != null" >
+        bknum2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="appName != null" >
+        #{appName,jdbcType=VARCHAR},
+      </if>
+      <if test="methodName != null" >
+        #{methodName,jdbcType=VARCHAR},
+      </if>
+      <if test="hostName != null" >
+        #{hostName,jdbcType=VARCHAR},
+      </if>
+      <if test="exceptionInfo != null" >
+        #{exceptionInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="occurTime != null" >
+        #{occurTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="params != null" >
+        #{params,jdbcType=VARCHAR},
+      </if>
+      <if test="bkchar1 != null" >
+        #{bkchar1,jdbcType=VARCHAR},
+      </if>
+      <if test="bkchar2 != null" >
+        #{bkchar2,jdbcType=VARCHAR},
+      </if>
+      <if test="bknum1 != null" >
+        #{bknum1,jdbcType=BIGINT},
+      </if>
+      <if test="bknum2 != null" >
+        #{bknum2,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>

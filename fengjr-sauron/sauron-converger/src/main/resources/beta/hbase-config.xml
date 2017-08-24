@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+
+    <!--<bean  class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">-->
+        <!--<property name="locations">-->
+            <!--<list>-->
+                <!--<value>classpath:config-hbase.properties</value>-->
+            <!--</list>-->
+        <!--</property>-->
+    <!--</bean>-->
+
+    <!--hbase config-->
+
+    <bean id="hbaseConfiguration" class="org.springframework.data.hadoop.hbase.HbaseConfigurationFactoryBean">
+        <property name="properties">
+            <props>
+                <prop key="hbase.zookeeper.quorum">${hbase.client.host}</prop>
+                <prop key="hbase.zookeeper.property.clientPort">${hbase.client.port}</prop>
+
+                <!-- hbase default:true -->
+                <prop key="hbase.ipc.client.tcpnodelay">${hbase.ipc.client.tcpnodelay}</prop>
+                <!-- hbase default:60000 -->
+                <prop key="hbase.rpc.timeout">${hbase.rpc.timeout}</prop>
+                 <!--hbase default:Integer.MAX_VALUE -->
+                <prop key="hbase.client.operation.timeout">${hbase.client.operation.timeout}</prop>
+
+                <!-- hbase socket read timeout. default: 200000-->
+                <prop key="hbase.ipc.client.socket.timeout.read">${hbase.ipc.client.socket.timeout.read}</prop>
+                <!-- socket write timeout. hbase default: 600000-->
+                <prop key="hbase.ipc.client.socket.timeout.write">${hbase.ipc.client.socket.timeout.write}</prop>
+            </props>
+        </property>
+        <property name="deleteConnection" value="false"/>
+    </bean>
+
+    <bean id="connectionFactory" class="com.fengjr.sauron.dao.hbase.PooledHTableFactory">
+        <constructor-arg ref="hbaseConfiguration"/>
+        <constructor-arg value="${hbase.client.thread.max}"/>
+        <constructor-arg value="${hbase.client.threadPool.queueSize}"/>
+        <constructor-arg value="${hbase.client.threadPool.prestart}"/>
+    </bean>
+
+
+    <bean id="hbaseTemplate" class="com.fengjr.sauron.dao.hbase.HbaseTemplate2">
+        <property name="configuration" ref="hbaseConfiguration"/>
+        <property name="tableFactory" ref="connectionFactory"/>
+    </bean>
+
+
+
+    <bean id="traceDistributor" class="com.sematext.hbase.wd.RowKeyDistributorByHashPrefix">
+        <constructor-arg ref="traceHasher"/>
+    </bean>
+
+    <bean id="traceHasher" class="com.sematext.hbase.wd.RowKeyDistributorByHashPrefix$OneByteSimpleHash">
+        <constructor-arg>
+            <value type="int">64</value>
+        </constructor-arg>
+    </bean>
+
+
+</beans>

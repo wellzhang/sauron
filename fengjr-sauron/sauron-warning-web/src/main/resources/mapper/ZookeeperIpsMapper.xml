@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.feng.sauron.warning.dao.ZookeeperIpsMapper" >
+  <resultMap id="BaseResultMap" type="com.feng.sauron.warning.domain.ZookeeperIps" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="zk_ip" property="zkIp" jdbcType="VARCHAR" />
+    <result column="zk_name" property="name" jdbcType="VARCHAR" />
+    <result column="describes" property="describes" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updata_time" property="updataTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, zk_ip, zk_name, describes, created_time, updata_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_zookeeper_ips
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_zookeeper_ips
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM tb_zookeeper_ips
+    LIMIT #{startIndx},#{pageSize}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from tb_zookeeper_ips
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.feng.sauron.warning.domain.ZookeeperIps" >
+    insert into tb_zookeeper_ips (id, zk_ip, zk_name,
+      describes, created_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{zkIp,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{describes,jdbcType=VARCHAR}, now()
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.feng.sauron.warning.domain.ZookeeperIps" >
+    insert into tb_zookeeper_ips
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="zkIp != null" >
+        zk_ip,
+      </if>
+      <if test="name != null" >
+        zk_name,
+      </if>
+      <if test="describes != null" >
+        describes,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+      <if test="updataTime != null" >
+        updata_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="zkIp != null" >
+        #{zkIp,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="describes != null" >
+        #{describes,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updataTime != null" >
+        #{updataTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.feng.sauron.warning.domain.ZookeeperIps" >
+    update tb_zookeeper_ips
+    <set >
+      <if test="zkIp != null" >
+        zk_ip = #{zkIp,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        zk_name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="describes != null" >
+        describes = #{describes,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updataTime != null" >
+        updata_time = #{updataTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.feng.sauron.warning.domain.ZookeeperIps" >
+    update tb_zookeeper_ips
+    set zk_ip = #{zkIp,jdbcType=VARCHAR},
+      zk_name = #{name,jdbcType=VARCHAR},
+      describes = #{describes,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updata_time = now()
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

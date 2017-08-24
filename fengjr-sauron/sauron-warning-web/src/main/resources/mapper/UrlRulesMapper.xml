@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.feng.sauron.warning.dao.UrlRulesMapper">
+  <resultMap id="BaseResultMap" type="com.feng.sauron.warning.domain.UrlRules">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="app_id" jdbcType="BIGINT" property="appId" />
+    <result column="app_name" jdbcType="VARCHAR" property="appName" />
+    <result column="monitor_key" jdbcType="VARCHAR" property="monitorKey" />
+    <result column="monitor_url" jdbcType="VARCHAR" property="monitorUrl" />
+    <result column="is_enabled" jdbcType="TINYINT" property="isEnabled" />
+    <result column="param" jdbcType="VARCHAR" property="param" />
+    <result column="request_interval" jdbcType="INTEGER" property="requestInterval" />
+    <result column="timeout" jdbcType="INTEGER" property="timeout" />
+    <result column="request_mode" jdbcType="TINYINT" property="requestMode" />
+    <result column="is_config_host" jdbcType="TINYINT" property="isConfigHost" />
+    <result column="host_ip" jdbcType="VARCHAR" property="hostIp" />
+    <result column="match_content" jdbcType="VARCHAR" property="matchContent" />
+    <result column="is_contain" jdbcType="TINYINT" property="isContain" />
+    <result column="cookies" jdbcType="VARCHAR" property="cookies" />
+    <result column="is_default_code" jdbcType="TINYINT" property="isDefaultCode" />
+    <result column="custom_code" jdbcType="INTEGER" property="customCode" />
+    <result column="template" jdbcType="BIGINT" property="template" />
+    <result column="creator_id" jdbcType="BIGINT" property="creatorId" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="updata_time" jdbcType="TIMESTAMP" property="updataTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, app_id, app_name, monitor_key, monitor_url, is_enabled, param, request_interval, 
+    timeout, request_mode, is_config_host, host_ip, match_content, is_contain, cookies, 
+    is_default_code, custom_code, template, creator_id, created_time, updata_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_url_rules
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM tb_url_rules
+    WHERE 1 = 1
+    <if test="appName != null and appName != ''">
+      AND app_name LIKE '%${appName}%'
+    </if>
+    <if test="monitorKey != null and monitorKey != ''">
+      AND monitor_key LIKE '%${monitorKey}%'
+    </if>
+    <if test="creatorId != null and creatorId != ''">
+      AND app_id in(select id from tb_app where user_id = #{creatorId,jdbcType=VARCHAR})
+    </if>
+    ORDER BY id DESC
+    LIMIT #{startIndex},#{pageSize}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer">
+    SELECT count(id)
+    FROM tb_url_rules
+    WHERE 1 = 1
+    <if test="appName != null and appName != ''">
+      AND app_name LIKE '%${appName}%'
+    </if>
+    <if test="monitorKey != null and monitorKey != ''">
+      AND monitor_key LIKE '%${monitorKey}%'
+    </if>
+    <if test="creatorId != null and creatorId != ''">
+      AND app_id in(select id from tb_app where user_id = #{creatorId,jdbcType=VARCHAR})
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from tb_url_rules
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.feng.sauron.warning.domain.UrlRules">
+    insert into tb_url_rules (id, app_id, app_name, 
+      monitor_key, monitor_url, is_enabled, 
+      param, request_interval, timeout, 
+      request_mode, is_config_host, host_ip, 
+      match_content, is_contain, cookies, 
+      is_default_code, custom_code, template, 
+      creator_id, created_time, updata_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{appId,jdbcType=BIGINT}, #{appName,jdbcType=VARCHAR}, 
+      #{monitorKey,jdbcType=VARCHAR}, #{monitorUrl,jdbcType=VARCHAR}, #{isEnabled,jdbcType=TINYINT}, 
+      #{param,jdbcType=VARCHAR}, #{requestInterval,jdbcType=INTEGER}, #{timeout,jdbcType=INTEGER}, 
+      #{requestMode,jdbcType=TINYINT}, #{isConfigHost,jdbcType=TINYINT}, #{hostIp,jdbcType=VARCHAR}, 
+      #{matchContent,jdbcType=VARCHAR}, #{isContain,jdbcType=TINYINT}, #{cookies,jdbcType=VARCHAR}, 
+      #{isDefaultCode,jdbcType=TINYINT}, #{customCode,jdbcType=INTEGER}, #{template,jdbcType=BIGINT}, 
+      #{creatorId,jdbcType=BIGINT}, #{createdTime,jdbcType=TIMESTAMP}, #{updataTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.feng.sauron.warning.domain.UrlRules">
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      SELECT LAST_INSERT_ID() AS ID
+    </selectKey>
+    insert into tb_url_rules
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="appId != null">
+        app_id,
+      </if>
+      <if test="appName != null">
+        app_name,
+      </if>
+      <if test="monitorKey != null">
+        monitor_key,
+      </if>
+      <if test="monitorUrl != null">
+        monitor_url,
+      </if>
+      <if test="isEnabled != null">
+        is_enabled,
+      </if>
+      <if test="param != null">
+        param,
+      </if>
+      <if test="requestInterval != null">
+        request_interval,
+      </if>
+      <if test="timeout != null">
+        timeout,
+      </if>
+      <if test="requestMode != null">
+        request_mode,
+      </if>
+      <if test="isConfigHost != null">
+        is_config_host,
+      </if>
+      <if test="hostIp != null">
+        host_ip,
+      </if>
+      <if test="matchContent != null">
+        match_content,
+      </if>
+      <if test="isContain != null">
+        is_contain,
+      </if>
+      <if test="cookies != null">
+        cookies,
+      </if>
+      <if test="isDefaultCode != null">
+        is_default_code,
+      </if>
+      <if test="customCode != null">
+        custom_code,
+      </if>
+      <if test="template != null">
+        template,
+      </if>
+      <if test="creatorId != null">
+        creator_id,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="updataTime != null">
+        updata_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="appId != null">
+        #{appId,jdbcType=BIGINT},
+      </if>
+      <if test="appName != null">
+        #{appName,jdbcType=VARCHAR},
+      </if>
+      <if test="monitorKey != null">
+        #{monitorKey,jdbcType=VARCHAR},
+      </if>
+      <if test="monitorUrl != null">
+        #{monitorUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="isEnabled != null">
+        #{isEnabled,jdbcType=TINYINT},
+      </if>
+      <if test="param != null">
+        #{param,jdbcType=VARCHAR},
+      </if>
+      <if test="requestInterval != null">
+        #{requestInterval,jdbcType=INTEGER},
+      </if>
+      <if test="timeout != null">
+        #{timeout,jdbcType=INTEGER},
+      </if>
+      <if test="requestMode != null">
+        #{requestMode,jdbcType=TINYINT},
+      </if>
+      <if test="isConfigHost != null">
+        #{isConfigHost,jdbcType=TINYINT},
+      </if>
+      <if test="hostIp != null">
+        #{hostIp,jdbcType=VARCHAR},
+      </if>
+      <if test="matchContent != null">
+        #{matchContent,jdbcType=VARCHAR},
+      </if>
+      <if test="isContain != null">
+        #{isContain,jdbcType=TINYINT},
+      </if>
+      <if test="cookies != null">
+        #{cookies,jdbcType=VARCHAR},
+      </if>
+      <if test="isDefaultCode != null">
+        #{isDefaultCode,jdbcType=TINYINT},
+      </if>
+      <if test="customCode != null">
+        #{customCode,jdbcType=INTEGER},
+      </if>
+      <if test="template != null">
+        #{template,jdbcType=BIGINT},
+      </if>
+      <if test="creatorId != null">
+        #{creatorId,jdbcType=BIGINT},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updataTime != null">
+        #{updataTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.feng.sauron.warning.domain.UrlRules">
+    update tb_url_rules
+    <set>
+      <if test="appId != null">
+        app_id = #{appId,jdbcType=BIGINT},
+      </if>
+      <if test="appName != null">
+        app_name = #{appName,jdbcType=VARCHAR},
+      </if>
+      <if test="monitorKey != null">
+        monitor_key = #{monitorKey,jdbcType=VARCHAR},
+      </if>
+      <if test="monitorUrl != null">
+        monitor_url = #{monitorUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="isEnabled != null">
+        is_enabled = #{isEnabled,jdbcType=TINYINT},
+      </if>
+      <if test="param != null">
+        param = #{param,jdbcType=VARCHAR},
+      </if>
+      <if test="requestInterval != null">
+        request_interval = #{requestInterval,jdbcType=INTEGER},
+      </if>
+      <if test="timeout != null">
+        timeout = #{timeout,jdbcType=INTEGER},
+      </if>
+      <if test="requestMode != null">
+        request_mode = #{requestMode,jdbcType=TINYINT},
+      </if>
+      <if test="isConfigHost != null">
+        is_config_host = #{isConfigHost,jdbcType=TINYINT},
+      </if>
+      <if test="hostIp != null">
+        host_ip = #{hostIp,jdbcType=VARCHAR},
+      </if>
+      <if test="matchContent != null">
+        match_content = #{matchContent,jdbcType=VARCHAR},
+      </if>
+      <if test="isContain != null">
+        is_contain = #{isContain,jdbcType=TINYINT},
+      </if>
+      <if test="cookies != null">
+        cookies = #{cookies,jdbcType=VARCHAR},
+      </if>
+      <if test="isDefaultCode != null">
+        is_default_code = #{isDefaultCode,jdbcType=TINYINT},
+      </if>
+
+        custom_code = #{customCode,jdbcType=INTEGER},
+
+      <if test="template != null">
+        template = #{template,jdbcType=BIGINT},
+      </if>
+      <if test="creatorId != null">
+        creator_id = #{creatorId,jdbcType=BIGINT},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updataTime != null">
+        updata_time = now(),
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.feng.sauron.warning.domain.UrlRules">
+    update tb_url_rules
+    set app_id = #{appId,jdbcType=BIGINT},
+      app_name = #{appName,jdbcType=VARCHAR},
+      monitor_key = #{monitorKey,jdbcType=VARCHAR},
+      monitor_url = #{monitorUrl,jdbcType=VARCHAR},
+      is_enabled = #{isEnabled,jdbcType=TINYINT},
+      param = #{param,jdbcType=VARCHAR},
+      request_interval = #{requestInterval,jdbcType=INTEGER},
+      timeout = #{timeout,jdbcType=INTEGER},
+      request_mode = #{requestMode,jdbcType=TINYINT},
+      is_config_host = #{isConfigHost,jdbcType=TINYINT},
+      host_ip = #{hostIp,jdbcType=VARCHAR},
+      match_content = #{matchContent,jdbcType=VARCHAR},
+      is_contain = #{isContain,jdbcType=TINYINT},
+      cookies = #{cookies,jdbcType=VARCHAR},
+      is_default_code = #{isDefaultCode,jdbcType=TINYINT},
+      custom_code = #{customCode,jdbcType=INTEGER},
+      template = #{template,jdbcType=BIGINT},
+      creator_id = #{creatorId,jdbcType=BIGINT},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updata_time = now()
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

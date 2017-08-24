@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.feng.sauron.warning.dao.UrlMonitorMapper" >
+  <resultMap id="BaseResultMap" type="com.feng.sauron.warning.domain.UrlMonitor" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="url_rules_id" property="urlRulesId" jdbcType="BIGINT" />
+    <result column="fail_times" property="failTimes" jdbcType="INTEGER" />
+    <result column="total_times" property="totalTimes" jdbcType="INTEGER" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updata_time" property="updataTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >id, url_rules_id, fail_times, total_times, created_time, updata_time </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_url_monitor
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByUrlRuleId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    from tb_url_monitor
+    where url_rules_id = #{rulesId,jdbcType=BIGINT}
+  </select>
+  <select id="selectByPage" resultType="java.util.HashMap">
+    SELECT r.id as id,r.app_name as appName,r.monitor_url as monitorUrl,
+    r.monitor_key as monitorKey,m.updata_time as updataTime,m.fail_times as failTimes,m.total_times as totalTimes , m.id as mId
+    FROM tb_url_rules r
+    LEFT JOIN  tb_url_monitor m
+    ON r.id = m.url_rules_id
+    WHERE 1 = 1
+    <if test="appName != null and appName != ''">
+      AND r.app_name LIKE '%${appName}%'
+    </if>
+    <if test="monitorKey != null and monitorKey != ''">
+      AND r.monitor_key LIKE '%${monitorKey}%'
+    </if>
+    <if test="creatorId != null and creatorId != ''">
+      AND r.app_id in(select id from tb_app where user_id = #{creatorId,jdbcType=VARCHAR})
+    </if>
+    ORDER BY r.id
+    LIMIT #{startIndex},#{pageSize}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer">
+    SELECT count(r.id)
+    FROM tb_url_rules r
+    LEFT JOIN  tb_url_monitor m
+    ON r.id = m.url_rules_id
+    WHERE 1 = 1
+    <if test="appName != null and appName != ''">
+      AND r.app_name LIKE '%${appName}%'
+    </if>
+    <if test="monitorKey != null and monitorKey != ''">
+      AND r.monitor_key LIKE '%${monitorKey}%'
+    </if>
+    <if test="creatorId != null and creatorId != ''">
+      AND r.app_id in(select id from tb_app where user_id = #{creatorId,jdbcType=VARCHAR})
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from tb_url_monitor
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByUrlRuleId" parameterType="java.lang.Long" >
+    delete from tb_url_monitor
+    where url_rules_id = #{rulesId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.feng.sauron.warning.domain.UrlMonitor" >
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      SELECT LAST_INSERT_ID() AS ID
+    </selectKey>
+    insert into tb_url_monitor (id, url_rules_id, fail_times, 
+      total_times, created_time, updata_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{urlRulesId,jdbcType=BIGINT}, #{failTimes,jdbcType=INTEGER}, 
+      #{totalTimes,jdbcType=INTEGER}, now(), now()
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.feng.sauron.warning.domain.UrlMonitor" >
+    insert into tb_url_monitor
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="urlRulesId != null" >
+        url_rules_id,
+      </if>
+      <if test="failTimes != null" >
+        fail_times,
+      </if>
+      <if test="totalTimes != null" >
+        total_times,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+      <if test="updataTime != null" >
+        updata_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="urlRulesId != null" >
+        #{urlRulesId,jdbcType=BIGINT},
+      </if>
+      <if test="failTimes != null" >
+        #{failTimes,jdbcType=INTEGER},
+      </if>
+      <if test="totalTimes != null" >
+        #{totalTimes,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updataTime != null" >
+        #{updataTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.feng.sauron.warning.domain.UrlMonitor" >
+    update tb_url_monitor
+    <set >
+      <if test="urlRulesId != null" >
+        url_rules_id = #{urlRulesId,jdbcType=BIGINT},
+      </if>
+      <if test="failTimes != null" >
+        fail_times = #{failTimes,jdbcType=INTEGER},
+      </if>
+      <if test="totalTimes != null" >
+        total_times = #{totalTimes,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updataTime != null" >
+        updata_time = now(),
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.feng.sauron.warning.domain.UrlMonitor" >
+    update tb_url_monitor
+    set url_rules_id = #{urlRulesId,jdbcType=BIGINT},
+      fail_times = #{failTimes,jdbcType=INTEGER},
+      total_times = #{totalTimes,jdbcType=INTEGER},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updata_time = now()
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

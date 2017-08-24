@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="../../css/bootstrap.css" rel="stylesheet">
+    <link href="src/css/bootstrap-treeview.css">
+</head>
+<body>
+<div id="treeView"></div>
+</body>
+<script src="../jquery-2.2.0.min.js"></script>
+<script src="src/js/bootstrap-treeview.js"></script>
+<script type="text/javascript">
+    $(function () {
+        function getTreeData() {
+            var state = {
+                checked: true,
+//                disabled: true,
+//                expanded: true,
+//                selected: true
+            }
+            var tree = [
+                {
+                    text: "Parent 1",
+                    nodes: [
+                        {
+                            text: "Child 1",
+                            nodes: [
+                                {
+                                    text: "Grandchild 1"
+                                },
+                                {
+                                    text: "Grandchild 2"
+                                }
+                            ],
+                            state: state
+                        },
+                        {
+                            text: "Child 2",
+                            state: state
+                        },
+
+                    ],
+                    state: state
+                },
+                {
+                    text: "Parent 2"
+                },
+                {
+                    text: "Parent 3"
+                },
+                {
+                    text: "Parent 4"
+                },
+                {
+                    text: "Parent 5"
+                }
+            ];
+
+            return tree;
+        }
+
+
+        $("#treeView").treeview({
+            data: getTreeData()
+        })
+    });
+</script>
+</html>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 连接池配置，根据需要修改值-->
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxTotal" value="150"/>
+        <property name="maxIdle" value="10"/>
+        <property name="minIdle" value="1"/>
+        <property name="maxWaitMillis" value="30000"/>
+        <property name="testOnBorrow" value="true"/>
+        <property name="testOnReturn" value="true"/>
+        <property name="testWhileIdle" value="true"/>
+    </bean>
+
+    <bean id="redisCluster" class="com.fengjr.cachecloud.client.factory.RedisClusterConnectionFactory"  init-method="connection"  destroy-method="destory" >
+        <constructor-arg index="0" ref="jedisPoolConfig" />
+        <constructor-arg index="1" value="${cachecloud.zkurl}" />
+        <constructor-arg index="2" value="${cachecloud.clusterName}" />
+        <constructor-arg index="3" value="${cachecloud.token}" />
+    </bean>
+
+    <bean id="redisClient" class="com.fengjr.cachecloud.client.cache.CachecloudClient" >
+        <constructor-arg index="0" ref="redisCluster" />
+    </bean>
+
+
+
+</beans>

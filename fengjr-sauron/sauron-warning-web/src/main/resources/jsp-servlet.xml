@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns="http://www.springframework.org/schema/beans"
+	   xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+
+
+	<context:property-placeholder location="classpath*:self.properties"/>
+
+
+	<context:component-scan base-package="com.feng.sauron.warning.web">
+		<context:include-filter type="annotation"
+			expression="org.springframework.web.bind.annotation.ControllerAdvice" />
+		<context:include-filter type="regex"
+			expression=".*Controller" />
+	</context:component-scan>
+
+
+
+
+	<!-- ViewResolver -->
+	<bean id="velocityConfigurer" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+		<property name="resourceLoaderPath">
+			<value>WEB-INF/vm/</value>
+		</property>
+		<property name="velocityProperties">
+			<props>
+				<prop key="directive.foreach.counter.name">velocityCount</prop>
+				<prop key="directive.foreach.counter.initial.value">0</prop>
+				<prop key="input.encoding">utf-8</prop>
+				<prop key="output.encoding">utf-8</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
+		<property name="suffix" value=".html"/>
+		<property name="exposeRequestAttributes" value="true"/>
+		<property name="exposeSessionAttributes" value="true"/>
+		<property name="contentType" value="text/html;charset=UTF-8"/>
+		<property name="toolboxConfigLocation" value="/WEB-INF/velocity-toolbox.xml"/>
+		<property name="order" value="1"/>
+	</bean>
+
+
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/page/jsp/" />
+		<property name="suffix" value=".jsp" />
+
+		<property name="order" value="10"/>
+	</bean>
+	<mvc:annotation-driven />
+	<mvc:default-servlet-handler />
+
+	<bean id="influxdbName" class="java.lang.String"></bean>
+
+	<!--<aop:aspectj-autoproxy proxy-target-class="true" />-->
+
+	<!-- 配置无权限异常捕获的view，修改为系统自身权限提示页面 -->
+	<bean
+		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="exceptionMappings">
+			<props>
+				<prop key="com.fengjr.upm.filter.exception.UnAuthorizedException">error/403</prop>
+			</props>
+		</property>
+	</bean>
+
+
+
+
+	<mvc:interceptors>
+		<!-- 使用bean定义一个Interceptor，直接定义在mvc:interceptors根下面的Interceptor将拦截所有的请求 -->
+		<bean class="com.feng.sauron.warning.filter.AuthorizationFilter"/>
+	</mvc:interceptors>
+
+	<!-- 	<bean id="dubboAliveMonitor" class="com.feng.sauron.warning.monitor.dubbo.DubboAliveMonitor" -->
+<!-- 		init-method="init" destroy-method="close"> -->
+<!-- 	</bean> -->
+
+
+
+</beans>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.feng.sauron.warning.dao.MetricOptMapper" >
+  <resultMap id="BaseResultMap" type="com.feng.sauron.warning.domain.MetricOpt" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="metric_name" property="metricName" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, metric_name, status
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_metric_opt
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+
+  <select id="selectAllMetricsOpt" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  	select 
+    <include refid="Base_Column_List" />
+    from tb_metric_opt 
+    where status=#{status}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from tb_metric_opt
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.feng.sauron.warning.domain.MetricOpt" >
+    insert into tb_metric_opt (id, metric_name, status
+      )
+    values (#{id,jdbcType=BIGINT}, #{metricName,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.feng.sauron.warning.domain.MetricOpt" >
+    insert into tb_metric_opt
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="metricName != null" >
+        metric_name,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="metricName != null" >
+        #{metricName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.feng.sauron.warning.domain.MetricOpt" >
+    update tb_metric_opt
+    <set >
+      <if test="metricName != null" >
+        metric_name = #{metricName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.feng.sauron.warning.domain.MetricOpt" >
+    update tb_metric_opt
+    set metric_name = #{metricName,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

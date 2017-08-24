@@ -1,0 +1,848 @@
+<html>
+<head>
+    <title></title>
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <link rel="stylesheet" href="/resources/css/bootstrap.min.css">
+    <link href="/resources/css/ionicons.min.css" rel="stylesheet"/>
+    <link href="/resources/css/font-awesome.min.css" rel="stylesheet"/>
+    <link href="/resources/css/AdminLTE.css" rel="stylesheet" type="text/css">
+
+    <link type="text/css" rel="stylesheet" href="/resources/js/bigscatterchart/css/jquery-ui.css"/>
+    <link type="text/css" rel="stylesheet" href="/resources/js/bigscatterchart/css/bigscatterchart.css"/>
+
+    <link href="/resources/css/timepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css"/>
+
+    <script src="/resources/js/jquery.min.js"></script>
+    <script src="/resources/js/bootstrap.min.js"></script>
+
+
+    <style type="text/css">
+        .hidden-if-too-long {
+            max-width: 200px;
+            -o-text-overflow: ellipsis;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .table > tbody > .active > td {
+            background-color: #2771b9;
+        }
+
+        .table-hover > tbody > tr:hover > td, .table-hover > tbody > tr:hover > th {
+            background-color: #2771b9;
+        }
+
+        .table-hover > tbody > tr > .active:hover, .table-hover > tbody > .active:hover > td, .table-hover > tbody > .active:hover > th {
+            background-color: #2771b9;
+        }
+
+        .table-hover > tbody > tr:hover > td, .table-hover > tbody > tr:hover > th {
+            background-color: #2771b9;
+        }
+    </style>
+</head>
+<body class="skin-black">
+#include("/common/head.html")
+<div class="wrapper row-offcanvas row-offcanvas-left">
+    #parse("/common/leftMenu.html")
+    <aside class="right-side">
+        <section class="content" style="padding-top:2px;padding-bottom: 0px;">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box" style="margin-bottom: 5px;">
+                        <div class="box-header">
+                            <!--<i class="fa fa-th"></i>-->
+                        </div>
+                        <div class="box-body" style="padding-bottom: 3px;">
+                            <form id="indexForm" class="form-inline" role="form" style="margin-bottom: 3px;">
+                                <div class="form-group">
+                                    <label>APP:</label>
+                                    <select id="appSelect" class="form-control" name="appName">
+                                        <option value="">请选择APP</option>
+                                    </select>
+                                </div>
+                                <!--<div class="form-group">-->
+                                <!--<select id="hostSelect" class="form-control" name="host">-->
+                                <!--<option value="">请选择HOST</option>-->
+                                <!--</select>-->
+                                <!--</div>-->
+                                <div class="form-group">
+                                    <label><input type="radio" name="timeBefore" value="5min" checked>5min</label>
+                                    <label><input type="radio" name="timeBefore" value="20min">20min</label>
+                                    <label><input type="radio" name="timeBefore" value="1h">1H</label>
+                                </div>
+                                <div class="form-group" style="width: 350px;">
+                                    <input type="text" name="timeSpan" id="reservation" class="form-control pull-right">
+                                </div>
+                                <button type="button" class="btn btn-default" onclick="refreshAllComponents()">查询
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-7 col-xs-12" style="padding-right: 5px;">
+                    <div class="box" style="margin-bottom: 5px;">
+                        <div class="box-header"></div>
+                        <div class="box-body" style="position:relative;">
+                            <div id="topology" style="width:100%;height:40%;"></div>
+                            <div id="overView"
+                                 style="width: 100px;height: 100px;background-color: aliceblue;"></div>
+                            <!--<div id="contextMenu" class="alert alert-info"-->
+                            <!--style="position:absolute;z-index: 2000;display: none;"></div>-->
+                            <div id="contextMenu"
+                                 style="position:absolute;z-index: 2000;display: none;">
+                                <div class="box box-solid">
+                                    <div class="box-header" style="border-bottom: 1px solid #ddd;">
+                                        <h3 class="box-title">详细调用信息</h3>
+                                        <div class="box-tools pull-right">
+                                            <button class="btn btn-default btn-sm"
+                                                    onclick="document.getElementById('contextMenu').style.display='none';">
+                                                <i class="fa fa-times"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="box-body" id="contextMenuContent">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-xs-12" style="padding-left:0px;">
+                    <div class="box" style="margin-bottom: 5px;">
+                        <div class="box-header"></div>
+                        <div class="box-body" id="scatterbox">
+                            <div style="height:40%;width: 100%;">
+                                <div id="scatter"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-xs-12" style="padding-right: 5px;">
+                    <div class="box" style="margin-bottom: 5px;">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab1" data-toggle="tab">Total</a></li>
+                            <li><a href="#tab2" data-toggle="tab">Error</a></li>
+                            <li class="pull-right" style="margin-right:20px;"><h4>Top10</h4></li>
+                        </ul>
+                        <div class="tab-content no-padding">
+                            <div class="chart tab-pane active" id="tab1" style="position: relative;height:400px;">
+                                <div class="col-lg-3 col-md-4 col-xs-4" style="padding:0 0" id="tab1list"></div>
+                                <div class="col-lg-9 col-md-8 col-xs-8" style="padding:0 0;">
+                                    <div id="tab1diagram" style="padding:0 0;width:100%;height:100%;"></div>
+                                </div>
+                            </div>
+                            <div class="chart tab-pane" id="tab2" style="position: relative;height:400px;">
+                                <div class="col-lg-3 col-md-4 col-xs-4" style="padding:0 0" id="tab2list"></div>
+                                <div class="col-lg-9 col-md-8 col-xs-8" style="padding:0 0;">
+                                    <div id="tab2diagram" style="padding:0 0;width:100%;height:100%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-xs-12" style="padding-left:0px;">
+                    <div class="box" style="margin-bottom: 5px;">
+                        <div class="box-header" style="border-bottom: 1px solid #ddd;">
+                            <i class="fa fa-bar-chart-o"></i>
+                            <h3 class="box-title">Resource Chat</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="btn-group" id="ipList">
+                                <!--<button type="button" class="btn btn-default">255.255.255.255</button>-->
+                                <!--<button type="button" class="btn btn-default">255.255.255.255</button>-->
+                            </div>
+                            <hr style="margin-bottom: 10px;margin-top: 10px;">
+                            <div class="row">
+                                <div class="col-lg-4 col-xs-8">
+                                    <div class="small-box bg-aqua">
+                                        <div class="inner">
+                                            <h3 id="cpuValue">
+                                                无数据
+                                            </h3>
+                                            <p>CPU使用率</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="ion ion-ios7-timer"></i>
+                                        </div>
+                                        <a id="cpuHref" href="#"
+                                           target="_blank"
+                                           class="small-box-footer">
+                                            More info <i class="fa fa-arrow-circle-right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-xs-8">
+                                    <div class="small-box bg-aqua">
+                                        <div class="inner">
+                                            <h3 id="memValue">
+                                                无数据
+                                            </h3>
+                                            <p>内存占用</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="ion ion-pie-graph"></i>
+                                        </div>
+                                        <a id="memHref" href="#" class="small-box-footer" target="_blank">
+                                            More info <i class="fa fa-arrow-circle-right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-xs-8">
+                                    <div class="small-box bg-aqua">
+                                        <div class="inner">
+                                            <h3 id="conValue">
+                                                无数据
+                                            </h3>
+                                            <p>网络连接数</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="ion ion-stats-bars"></i>
+                                        </div>
+                                        <a id="conHref" href="#" class="small-box-footer" target="_blank">
+                                            More info <i class="fa fa-arrow-circle-right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-xs-8">
+                                    <div class="small-box bg-aqua">
+                                        <div class="inner">
+                                            <h3 id="vmThreadValue">
+                                                无数据
+                                            </h3>
+                                            <p>JVM线程数</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="ion ion-arrow-graph-up-right"></i>
+                                        </div>
+                                        <a id="vmThreadHref" href="#" class="small-box-footer" target="_blank">
+                                            More info <i class="fa fa-arrow-circle-right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-xs-8">
+                                    <div class="small-box bg-aqua">
+                                        <div class="inner">
+                                            <h3 id="vmMemValue">
+                                                无数据
+                                            </h3>
+                                            <p>JVM堆内存</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="ion ion-ios7-speedometer"></i>
+                                        </div>
+                                        <a id="vmMemHref" href="#" class="small-box-footer" target="_blank">
+                                            More info <i class="fa fa-arrow-circle-right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-xs-8">
+                                    <div class="small-box bg-aqua">
+                                        <div class="inner">
+                                            <h3 id="vmGCValue">
+                                                无数据
+                                            </h3>
+                                            <p>JVM GC次数</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="ion ion-ios7-box"></i>
+                                        </div>
+                                        <a id="vmGCHref" href="#" class="small-box-footer">
+                                            More info <i class="fa fa-arrow-circle-right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </aside>
+</div>
+<div style="display: none;">
+    <form id="scatterForm" action="/index/trace" method="post" target="_blank">
+    </form>
+</div>
+<script src="/resources/js/timepicker/bootstrap-timepicker.min.js"></script>
+<script src="/resources/js/timepicker/daterangepicker.js"></script>
+
+<script src="/resources/js/gojs/underscore/underscore.js"></script>
+<script src="/resources/js/gojs/jquery-class/jquery.Class.js?v=123"></script>
+<script src="/resources/js/gojs/go.js"></script>
+<script src="/resources/js/gojs/gochart.js"></script>
+
+<script type="text/javascript" src="/resources/js/bigscatterchart/js/jquery-ui.js"></script>
+<script type="text/javascript" src="/resources/js/bigscatterchart/js/date.js"></script>
+<script type="text/javascript" src="/resources/js/bigscatterchart/js/jquery.dragToSelect.js"></script>
+<script type="text/javascript" src="/resources/js/bigscatterchart/js/jquery.BigScatterChart.js"></script>
+
+<script type="text/javascript" src="/resources/js/echarts/echarts.min.js"></script>
+
+<script type="text/javascript" src="/resources/js/datatables/jquery.dataTables.js"></script>
+<script type="text/javascript" src="/resources/js/datatables/dataTables.bootstrap.js"></script>
+<script type="text/javascript" src="/resources/js/echart_line.js"></script>
+
+<script src="/resources/js/app.js"></script>
+<script type="text/javascript">
+
+    $(function () {
+        $.getJSON('/index/applist', function (data) {
+            var _html = '<option value="">请选择APP</option>';
+            var index = 0;
+            $.each(data, function (i, d) {
+                var _selected = '';
+                if (index == 0) {
+                    _selected = "selected";
+                    index++;
+                }
+                _html += '<option value="' + i + '" ' + _selected + '>' + d + '</option>';
+            })
+
+            $("#appSelect").html(_html);
+
+            refreshAllComponents();
+        });
+        $('#reservation').daterangepicker({timePicker: true, timePickerIncrement: 30, format: 'YYYY-MM-DD HH:mm:ss'});
+
+    });
+
+    function showOverView(ipdomid, jsonForm) {
+        $.getJSON('/index/overview', jsonForm, function (data) {
+
+            var _ipHtml = '';
+            var $dom = $("#" + ipdomid);
+            $.each(data, function (ip, v) {
+                _ipHtml += '<button type="button" class="btn btn-default" onclick="showSnapshot(this,\'' + jsonForm.appName + '\',\'' + ip + '\',\'' + ipdomid + '\');">' + ip + '</button>';
+                $dom.data(ip, v);
+            });
+            $dom.html(_ipHtml).children("button").first().trigger("click");
+
+
+        });
+    }
+
+    var DataPercentFormatter = function (data) {
+        var result = (data * 1.0) * 100;
+        return result + "%";
+    }
+
+    var snapshotKVMap = {
+        "cpu": "cpu",
+        "mem": "mem",
+        "con": "connec",
+        "vmThread": "jvm_thread",
+        "vmGC": "jvm_gc",
+        "vmMem": "jvm_mem"
+    }
+
+    var elementDoms = (function (elements) {
+        var result = {};
+        $.each(elements, function (i, e) {
+            result[e] = {
+                "value": $("#" + e + "Value"),
+                "href": $("#" + e + "Href"),
+            }
+        });
+        return result;
+    })(_.keys(snapshotKVMap));
+
+
+    function showSnapshot(element, appName, ip, ipdomid) {
+        var cssClass = "btn-primary";
+        $(element).addClass(cssClass).siblings().removeClass(cssClass);
+
+        var data = $("#" + ipdomid).data(ip);
+        $.each(snapshotKVMap, function (key, v) {
+            var dom = elementDoms[key];
+            var datum = data[v];
+            var anchor = key.startsWith("vm") ? "jvmArea" : "sysArea";
+            dom["value"].html(datum);
+            dom["href"].attr("href", "/index/apphost?appName=" + appName + "&host=" + ip + "#" + anchor);
+        });
+    }
+
+
+    function serializeForm(formid) {
+        var formData = $("#" + formid).serializeArray();
+        var jsonForm = {};
+        $.each(formData, function (i, d) {
+            jsonForm[d.name] = d.value;
+        });
+
+        return jsonForm;
+    }
+
+    function refreshAllComponents() {
+        var jsonForm = serializeForm("indexForm");
+        if (!jsonForm.appName) {
+            alert("请选择APP");
+            return false;
+        }
+        if (!jsonForm.timeBefore && !jsonForm.timeSpan) {
+            alert("请选择时间段");
+            return false;
+        }
+
+        if (jsonForm.timeSpan) {
+            var val = jsonForm.timeSpan;
+            if ((new Date((val.split(" ")[3] + " " + val.split(" ")[4]).replace(/-/g, "/")) - new Date((val.split(" ")[0] + " " + val.split(" ")[1]).replace(/-/g, "/"))) < 0) {
+                alert("结束时间必须大于开始时间");
+                return false;
+            }
+            if ((new Date((val.split(" ")[3] + " " + val.split(" ")[4]).replace(/-/g, "/")) - new Date((val.split(" ")[0] + " " + val.split(" ")[1]).replace(/-/g, "/"))) <= 3600000) {
+
+            } else {
+                alert("时间段间隔只能小于等于一小时");
+                return false;
+            }
+        }
+
+
+        showTopology(jsonForm);
+
+        showScatter('scatter', jsonForm);
+        localCachedLine = {}; //empty the cache
+        createTop10('tab1list', 'tab1diagram', '/index/top10/total', '/index/top10/linetotal', jsonForm, true);
+        createTop10('tab2list', 'tab2diagram', '/index/top10/error', '/index/top10/lineerror', jsonForm);
+
+        showOverView("ipList", jsonForm);
+    }
+
+    var dateFormatter = function (time) {
+        var date = new Date(time);
+        return date.toString('MM-dd HH:mm:ss');
+    }
+
+
+    var top10ListCreator = function (data) {
+        var _html = '<ul class="list-group">';
+        $.each(data, function (i, d) {
+            _html += '<li class="list-group-item list-group-item-action" onclick=itemClicked(this,\'' + targetid + '\',\'' + lineurl
+                + '\',\'' + d.url + '\',\''
+                + d.appName + '\',\'' + d.type + '\',\'' + d.host + '\');>' + d.url + '</li>';
+        });
+
+        _html += '</ul>';
+        return _html;
+    }
+
+    var top10TableCreator = function (data, targetid, lineurl) {
+        if (data.length == 0) {
+            return 'No data';
+        }
+        var _html = '<table class="table table-responsive table-bordered table-hover table-condensed">';
+        $.each(data, function (i, d) {
+
+            var title = top10urlFormat(d.url, d.type);
+            _html += '<tr onclick=itemClicked(this,\'' + targetid + '\',\'' + lineurl
+                + '\',\'' + encodeURI(d.url) + '\',\''
+                + d.appName + '\',\'' + d.type + '\',\'' + d.host + '\');><td><div data-toggle="tooltip" class="hidden-if-too-long" title="'
+                + d.url + '">' + title + '</div></td></tr>';
+        });
+        _html += '</table>';
+        return _html;
+    }
+
+    String.prototype.startsWith = function (str) {
+        return (this.match("^" + str) == str)
+    }
+
+    // 20161230
+    //截取方法或http请求，方法则只显示类名，http请求则只显示非域名部分，其他不截取
+    function top10urlFormat(url, type) {
+        if (url.startsWith('http')) {
+            url = url.replace(/http[s]?:\/\//, '');
+            url = url.substring(url.indexOf('/'), url.length);
+        } else if (/^([a-zA-Z]{1}\.){1,}\w+/.test(url)) {
+            var i1 = url.lastIndexOf('.');
+            var i2 = url.lastIndexOf('.', i1 - 1);
+            try {
+                url = url.substring(i2 + 1, i1);
+            } catch (e) {
+                console.error(e);
+            }
+        }
+        return url;
+    }
+
+    function createTop10(domid, targetid, url, lineurl, jsonForm, trigger) {
+        $.getJSON(url, jsonForm, function (data) {
+            var $table = $("#" + domid).html(top10TableCreator(data, targetid, lineurl));
+            if (trigger) {
+                $table.find("tr").first().trigger('click');
+            }
+
+        });
+    }
+
+    function itemClicked(dom, targetid, lineurl, url, appname, type, host) {
+        var _this = $(dom);
+        _this.addClass('active').siblings().removeClass('active');
+
+        var params = {};
+        params['appName'] = appname;
+        params['url'] = url;
+        if (type && type != 'null') {
+            params['type'] = type;
+        }
+        if (host && host != 'null') {
+            params['host'] = host;
+        }
+
+        createTop10Line(targetid, lineurl, params);
+    }
+
+
+    var localCachedLine = {};
+    function createTop10Line(domid, lineurl, param) {
+        var chart = echarts.init(document.getElementById(domid));
+        var key = _.values(param).join(',');
+        var cachedData = localCachedLine[key];
+        if (cachedData) {
+            createLine(chart, cachedData, param);
+            return;
+        }
+
+
+        $.post(lineurl, param, function (data) {
+                var gramData = {x: [], y: [], z: {}};
+
+                $.each(data, function (i, item) {
+                    var x = dateFormatter(item.timestamp);
+                    gramData.x.push(x);
+                    var y = item.timeCost;
+                    gramData.y.push(y);
+                    gramData.z[x + '_' + y] = item.traceID;
+                });
+
+                createLine(chart, gramData, param);
+                localCachedLine[key] = gramData;
+            }
+        )
+
+//        mychart.new(domid, lineurl, param, function (data) {
+//            var gramData = {x: [], y: [], z: {}};
+//            $.each(data, function (i, item) {
+//                var x = dateFormatter(item.timestamp);
+//                gramData.x.push(x);
+//                var y = item.timeCost;
+//                gramData.y.push(y);
+////                gramData.z[x + '_' + y] = item.traceID;
+//            });
+//            var tmp = gramData.y;
+//
+//            gramData.y = [{
+//                name: 'time',
+//                type: 'line',
+//                showAllSymbol: true,
+//                data: tmp
+//            }];
+//
+//            return gramData;
+//        });
+    }
+
+    function createLine(chart, gramData, param) {
+        var option = {
+            title: {},
+            color: ["#3fb1e3"],
+            grid: {
+//                height: 250,
+//                width:
+                show: true,
+                backgroundColor: '#ffffff'
+            },
+            tooltip: {
+                show: true
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    dataView: {readOnly: false},
+                    restore: {},
+                    saveAsImage: {},
+                    magicType: {type: ['line', 'bar']}, //视图样式切换，折线/柱形
+                    dataZoom: {
+                        show: true
+                    }
+                }
+            },
+            legend: {
+                data: ['time']
+            },
+            xAxis: {
+                data: gramData.x
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                name: 'time',
+                type: 'line',
+                showAllSymbol: true,
+                data: gramData.y
+            }]
+        };
+        chart.setOption(option);
+
+        chart.on('click', function (e) {
+            var x = e.name;
+            var y = e.value;
+            var traceid = gramData.z[x + '_' + y];
+            window.open('/index/trace?traceID=' + traceid + '&appName=' + param.appName);
+        })
+    }
+
+
+    var option = {
+        "sContainerId": "topology",
+        "sOverviewId": "overView",
+        "fOnNodeClicked": function (eMouseEvent, htData) {
+            $("#contextMenu").hide();
+        },
+        "fOnNodeContextClicked": function (event, htData) {
+            showNodeTable(event, htData);
+        },
+        "fOnBackgroundClicked": function (event, htData) {
+            $("#contextMenu").hide();
+        },
+        "fOnLinkClicked": function (eMouseEvent, htData) {
+            $("#contextMenu").hide();
+        },
+        "fOnLinkContextClicked": function (eMouseEvent, htData) {
+            showLinkTable(eMouseEvent, htData);
+        },
+        "fOnNodeMouseHover": function (eMouseEvent, htData) {
+            showNodeTable(eMouseEvent, htData);
+        },
+        "fOnNodeMouseLeave": function (eMouseEvent, htData) {
+//            $("#contextMenu").hide();
+        },
+        "fOnLinkMouseHover": function (e, htData) {
+            showLinkTable(e, htData);
+        },
+        "fOnLinkMouseLeave": function (e, htData) {
+//            $("#contextMenu").hide();
+        }
+    }
+
+
+    function topologyToScatter(params, status) {
+
+        var jsonForm = {};
+
+        jsonForm.appName = params.appName;
+        jsonForm.start = params.startTime;
+        jsonForm.end = params.endTime;
+        jsonForm.type = params.type;
+        if (status) {
+            jsonForm.status = status;
+        }
+
+        showScatter('scatter', jsonForm)
+    }
+
+
+    function showLinkTable(eMouseEvent, htData) {
+        var diagram = eMouseEvent.diagram;
+        var mousePt = diagram.lastInput.viewPoint;
+
+        var _html = '';
+        _html += '<a href="javascript:topologyToScatter({startTime:' + serverMap.startTime + ',endTime:' + serverMap.endTime + ',appName:\'' + serverMap.appName + '\',type:\'' + htData.type + '\'});" title="点击查看调用详情">总调用次数:' + htData.totalCount
+            + '</a>, <a href="javascript:topologyToScatter({startTime:' + serverMap.startTime + ',endTime:' + serverMap.endTime + ',appName:\'' + serverMap.appName + '\',type:\'' + htData.type + '\'},\'fail\');" title="点击查看调用详情">出错次数:' + htData.failCount
+            + '</a>, Top90平均耗时:' + htData.timeCost + 'ms'
+            + ',<a href="/index/trace?traceID=' + htData.traceID + '&appName=' + serverMap.appName + '" target="_blank" title="点击查看调用详情">最耗时traceID:' + htData.traceID + '</>';
+
+
+        var $contextMenu = $("#contextMenuContent");
+
+        $contextMenu.html(_html);
+
+        var $mainMenu = $("#contextMenu");
+        var dom = $mainMenu[0];
+        dom.style.left = mousePt.x + 15 + "px";
+        dom.style.top = mousePt.y + 15 + "px";
+        $mainMenu.show();
+    }
+
+    function showNodeTable(event, htData) {
+        var diagram = event.diagram;
+        var mousePt = diagram.lastInput.viewPoint;
+
+        var _html = '<table class="table table-responsive table-bordered table-hover table-condensed">';
+        _html += '<thead><tr><th>appName</th><th>url</th><th>total</th><th>error</th><th>top90</th></tr></thead>';
+        _html += '<tbody>';
+        $.each(htData.urlList, function (i, d) {
+            _html += '<tr><td>' + d.appName + '</td><td>' + d.url + '</td>'
+            _html += '<td>' + d.totalCount + '</td><td>' + d.errorCount + '</td><td>' + d.timeCost + '</td>'
+            _html += '</tr>';
+        });
+        _html += '</tbody></table>';
+
+
+        var $contextMenu = $("#contextMenuContent");
+
+        $contextMenu.html(_html);
+
+        var pagi = false;
+        if (htData.urlList.length > 10) {
+            pagi = true;
+        }
+
+        $contextMenu.find("table.table").dataTable({
+            "bPaginate": pagi,
+            "bFilter": false,
+            "bSort": true,
+            "bLengthChange": false,
+            "bInfo": false,
+            "bAutoWidth": false
+        });
+
+        var $mainMenu = $("#contextMenu");
+        var dom = $mainMenu[0];
+        dom.style.left = mousePt.x + 15 + "px";
+        dom.style.top = mousePt.y + 15 + "px";
+        $mainMenu.show();
+    }
+
+    var serverMap = new ServerMap(option, false);
+    var icons = window.ServerMapIcons;
+    var nodeDataFormatter = function (data) {
+        var result = [];
+        $.each(data, function (index, da) {
+            var type = da.category.toUpperCase();
+            var newType = 'BACKEND';
+            $.each(icons, function (i) {
+                if (i.indexOf(type) != -1 || i == type || type.indexOf(i) != -1) {
+                    newType = i;
+                }
+            });
+            da.category = newType;
+            result.push(da);
+        });
+        return result;
+    }
+
+    function showTopology(jsonForm) {
+        if (serverMap) {
+            serverMap.diagram.div = null;
+        }
+
+        $.getJSON('/index/topology', jsonForm, function (data) {
+            var obj = {
+                "class": "go.GraphLinksModel",
+                "nodeDataArray": nodeDataFormatter(data.nodeDataArray),
+                "linkDataArray": data.linkDataArray
+            };
+            serverMap.startTime = data.startTime;
+            serverMap.endTime = data.endTime;
+            serverMap.appName = jsonForm.appName;
+            serverMap.load(obj);
+        });
+
+    }
+
+    var oScatterChart;
+
+    function showScatter(domid, jsonForm) {
+        if (oScatterChart) {
+            try {
+                oScatterChart.destroy();
+            } catch (e) {
+            }
+        }
+
+        $.getJSON('/index/scatterData', jsonForm, function (data) {
+            createScatter(domid, data, jsonForm);
+        });
+    }
+
+    function createScatter(domid, data, jsonForm) {
+
+        var minY = 0;
+        var maxY = 0;
+
+        var sdata = [];
+        $.each(data, function (i, d) {
+            sdata.push({
+                x: d.time,
+                y: d.timeCost,
+                type: d.status,
+                traceid: d.traceID
+            });
+
+            if (minY > d.timeCost) {
+                minY = d.timeCost;
+            }
+            if (maxY < d.timeCost) {
+                maxY = d.timeCost;
+            }
+        });
+
+        if (sdata.length == 0) {
+            $("#" + domid).html('No data');
+            return;
+        }
+        $("#" + domid).html('');
+
+
+        var minTime = sdata[0].x - 60 * 1000 * 2;
+        var maxTime = sdata[sdata.length - 1].x + 60 * 1000 * 2;
+
+        var height = $("#topology").height();
+        var width = $("#scatterbox").width();
+
+        oScatterChart = new BigScatterChart({
+            sTitle: '方法调用耗时',
+            nWidth: width,
+            sContainerId: domid,
+            nXMin: minTime, nXMax: maxTime,
+            nYMin: minY, nYMax: maxY,
+            nZMin: 0, nZMax: 1,
+            nHeight: height,
+            nWidth: width,
+            nBubbleSize: 1,
+            nDefaultRadius: 2,
+            htTypeAndColor: {
+                'success': '#3fb1e3', // type name : color
+                'fail': '#fd7865',
+            },
+            sXLabel: '(time)',
+            sYLabel: '(ms)',
+            htGuideLine: {
+                'nLineWidth': 1,
+                'aLineDash': [2, 5],
+                'nGlobalAlpha': 0.2
+            },
+            sXLabel: '',
+            nPaddingRight: 5,
+            fOnSelect: function (htPosition, htXY) {
+                var aData = this.getDataByXY(htXY.nXFrom, htXY.nXTo, htXY.nYFrom, htXY.nYTo);
+                if (aData.length == 0) {
+                    return;
+                }
+                if (aData.length > 200) {
+                    alert("您选择的点太多，最多200个");
+                    return;
+                }
+                var _html = '';
+                $.each(aData, function (i, d) {
+                    _html += '<input type="hidden" name="traceID" value="' + d.traceid + '"/>'
+                        + '<input type="hidden" name="appName" value="' + jsonForm.appName + '"/>';
+                });
+
+                $("#scatterForm").html(_html).submit();
+            }
+        });
+
+        oScatterChart.setBubbles(sdata);
+        oScatterChart.redrawBubbles();
+    }
+</script>
+</body>
+</html>
