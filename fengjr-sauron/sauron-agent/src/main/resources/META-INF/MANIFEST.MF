@@ -1,6 +1,0 @@
-Manifest-Version: 1.0
-Premain-Class: com.feng.sauron.agent.SauronAgent
-Agent-Class: com.feng.sauron.agent.SauronAgent
-Can-Redefine-Classes: true
-Can-Retransform-Classes: true
-
