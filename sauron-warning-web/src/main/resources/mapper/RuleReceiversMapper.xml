@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.feng.sauron.warning.dao.RuleReceiversMapper" >
+  <resultMap id="BaseResultMap" type="com.feng.sauron.warning.domain.RuleReceiversKey" >
+    <id column="rule_id" property="ruleId" jdbcType="BIGINT" />
+    <id column="contact_id" property="contactId" jdbcType="BIGINT" />
+    <result column="r_type" property="type"  jdbcType="TINYINT"/>
+    <result column="notify_mode" property="notifyMode" jdbcType="VARCHAR"/>
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="com.feng.sauron.warning.domain.RuleReceiversKey" >
+    delete from tb_rule_receivers
+    where rule_id = #{ruleId,jdbcType=BIGINT}
+      and contact_id = #{contactId,jdbcType=BIGINT}
+      and notify_mode = #{notifyMode,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.feng.sauron.warning.domain.RuleReceiversKey" >
+    insert into tb_rule_receivers (rule_id, contact_id,r_type,notify_mode)
+    values (#{ruleId,jdbcType=BIGINT}, #{contactId,jdbcType=BIGINT},#{type,jdbcType=TINYINT},#{notifyMode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.feng.sauron.warning.domain.RuleReceiversKey" >
+    insert into tb_rule_receivers
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="ruleId != null" >
+        rule_id,
+      </if>
+      <if test="contactId != null" >
+        contact_id,
+      </if>
+      <if test="type != null" >
+        r_type,
+      </if>
+      <if test="notifyMode != null" >
+        notify_mode,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="ruleId != null" >
+        #{ruleId,jdbcType=BIGINT},
+      </if>
+      <if test="contactId != null" >
+        #{contactId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="notifyMode != null" >
+        #{notifyMode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+   <select id="selectByRuleId" resultMap="BaseResultMap">
+  	select 
+    rule_id , contact_id,r_type,notify_mode
+    from tb_rule_receivers 
+    where rule_id = #{ruleId} and r_type = #{type}
+  </select>
+  <delete id="deleteByRuleId">
+    DELETE
+      FROM  tb_rule_receivers
+     WHERE rule_id = #{ruleId} and r_type = #{type}
+  </delete>
+</mapper>

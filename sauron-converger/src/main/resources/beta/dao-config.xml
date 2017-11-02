@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+
+	<bean
+		class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" />
+
+	<context:component-scan base-package="com.fengjr.sauron" />
+
+	<bean id="jdbcProperties"
+		  class="com.fengjr.config.utils.ConfCentrePropertyPlaceHolderConfigurer">
+		<property name="appName" value="mongodb" />
+		<property name="locations">
+			<list>
+				<!-- 				<value>classpath:jdbc.properties</value> -->
+				<value>classpath:config-hbase.properties</value>
+				<value>classpath:redis.properties</value>
+			</list>
+		</property>
+	</bean>
+
+
+	<!--<bean id="mongoFactory" class="com.fengjr.sauron.dao.mongodb.MongoFactory">-->
+		<!--<property name="configMap">-->
+			<!--<map>-->
+				<!--<entry key="sauron" value-ref="mongosConfig1"></entry>-->
+				<!--&lt;!&ndash;<entry key="key1" value="value1"></entry> &ndash;&gt;-->
+			<!--</map>-->
+		<!--</property>-->
+	<!--</bean>-->
+
+	<!--<bean id="mongosConfig1" class="com.fengjr.sauron.dao.mongodb.MongoConfig">-->
+		<!--<property name="mongosAddr">-->
+			<!--<list>-->
+				<!--<value>10.255.73.162:40000</value>-->
+				<!--<value>10.255.73.163:40000</value>-->
+				<!--<value>10.255.73.163:40000</value>-->
+			<!--</list>-->
+		<!--</property>-->
+		<!--<property name="dbName">-->
+			<!--<value>SAURON</value>-->
+		<!--</property>-->
+		<!--<property name="collectionNames">-->
+			<!--<set>-->
+				<!--<value>metrics_ori_data</value>-->
+				<!--<value>metrics_ori_data_codebulk</value>-->
+				<!--<value>metrics_ori_data_codebulk_alarm</value>-->
+			<!--</set>-->
+		<!--</property>-->
+	<!--</bean>-->
+
+	<!--<bean id="mongoManger" class="com.fengjr.sauron.converger.kafka.storage.MongoManger"-->
+		<!--init-method="init">-->
+	<!--</bean>-->
+
+</beans>

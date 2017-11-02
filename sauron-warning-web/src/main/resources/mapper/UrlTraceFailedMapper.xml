@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.feng.sauron.warning.dao.UrlTraceFailedMapper" >
+  <resultMap id="BaseResultMap" type="com.feng.sauron.warning.domain.UrlTraceFailed" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="url_monitor_id" property="urlMonitorId" jdbcType="BIGINT" />
+    <result column="result" property="result" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, url_monitor_id, result, created_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_url_trace_failed
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM tb_url_trace_failed
+    WHERE url_monitor_id = #{urlMonitorId,jdbcType=BIGINT}
+    ORDER BY id
+    LIMIT #{startIndex},#{pageSize}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from tb_url_trace_failed
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.feng.sauron.warning.domain.UrlTraceFailed" >
+    insert into tb_url_trace_failed (id, url_monitor_id, result, 
+      created_time)
+    values (#{id,jdbcType=BIGINT}, #{urlMonitorId,jdbcType=BIGINT}, #{result,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.feng.sauron.warning.domain.UrlTraceFailed" >
+    insert into tb_url_trace_failed
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="urlMonitorId != null" >
+        url_monitor_id,
+      </if>
+      <if test="result != null" >
+        result,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="urlMonitorId != null" >
+        #{urlMonitorId,jdbcType=BIGINT},
+      </if>
+      <if test="result != null" >
+        #{result,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.feng.sauron.warning.domain.UrlTraceFailed" >
+    update tb_url_trace_failed
+    <set >
+      <if test="urlMonitorId != null" >
+        url_monitor_id = #{urlMonitorId,jdbcType=BIGINT},
+      </if>
+      <if test="result != null" >
+        result = #{result,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.feng.sauron.warning.domain.UrlTraceFailed" >
+    update tb_url_trace_failed
+    set url_monitor_id = #{urlMonitorId,jdbcType=BIGINT},
+      result = #{result,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

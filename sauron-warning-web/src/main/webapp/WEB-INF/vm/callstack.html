@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link href="/resources/css/AdminLTE.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/resources/css/bootstrap.min.css">
+    <!--<link rel="stylesheet" href="/resources/css/bootstrap-theme.min.css">-->
+    <link href="/resources/css/ionicons.min.css" rel="stylesheet"/>
+    <link href="/resources/css/font-awesome.min.css" rel="stylesheet"/>
+    <!--<link rel="stylesheet" href="/resources/css/warm.css">-->
+
+    <link href="/resources/css/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css"/>
+    <link type="text/css" rel="stylesheet" href="/resources/js/bigscatterchart/css/jquery-ui.css"/>
+    <link type="text/css" rel="stylesheet" href="/resources/js/bigscatterchart/css/bigscatterchart.css"/>
+
+    <link rel="stylesheet" href="/resources/js/SlickGrid-2.3.2/slick.grid.css" type="text/css"/>
+    <link rel="stylesheet" href="/resources/js/SlickGrid-2.3.2/examples/examples.css" type="text/css"/>
+
+
+    <style>
+        .cell-title {
+            font-weight: bold;
+        }
+
+        .cell-effort-driven {
+            text-align: center;
+        }
+
+        .toggle {
+            height: 9px;
+            width: 9px;
+            display: inline-block;
+        }
+
+        .toggle.expand {
+            background: url(/resources/js/SlickGrid-2.3.2/images/expand.gif) no-repeat center center;
+        }
+
+        .toggle.collapse {
+            background: url(/resources/js/SlickGrid-2.3.2/images/collapse.gif) no-repeat center center;
+        }
+
+        .slick-header-column.ui-state-default {
+            height: 25px;
+            line-height: 25px;
+        }
+
+        .table > tbody > .active > td {
+            background-color: #2771b9;
+        }
+
+        .table-hover > tbody > tr:hover > td, .table-hover > tbody > tr:hover > th {
+            background-color: #2771b9;
+        }
+
+        .table-hover > tbody > tr > .active:hover, .table-hover > tbody > .active:hover > td, .table-hover > tbody > .active:hover > th {
+            background-color: #2771b9;
+        }
+
+        .table-hover > tbody > tr:hover > td, .table-hover > tbody > tr:hover > th {
+            background-color: #2771b9;
+        }
+
+    </style>
+
+    <script type="text/javascript" src="/resources/js/jquery.min.js"></script>
+</head>
+<body class="skin-black">
+#include("/common/head.html")
+<div class="wrapper row-offcanvas row-offcanvas-left">
+    #parse("/common/leftMenu.html")
+    <aside class="right-side">
+        <section class="content-header">
+        </section>
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <h3 class="box-title">方法列表</h3>
+                        </div><!-- /.box-header -->
+                        <div class="box-body table-responsive">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>Start Time</th>
+                                    <th>Method Name</th>
+                                    <th>Type</th>
+                                    <th>Detail</th>
+                                    <th>Res.(ms)</th>
+                                    <th>Exception</th>
+                                    <th>Host</th>
+                                    <th>TraceID</th>
+                                    <th>AppName</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                #foreach($item in $list)
+                                <tr traceid="$!{item.traceId}" appName="$!{item.appName}">
+                                    <td>$date.format("yyyy-MM-dd HH:mm:ss",$!{item.logTime})</td>
+                                    <td>$!{item.methodName}</td>
+                                    <td>$!{item.type}</td>
+                                    <td>$!{item.detail}</td>
+                                    <td>$!{item.duration}</td>
+                                    <td>$!{item.exception}</td>
+                                    <td>$!{item.hostName}</td>
+                                    <td>$!{item.traceId}</td>
+                                    <td>$!{item.appName}</td>
+                                </tr>
+                                #end
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <h3 class="box-title">调用栈</h3>
+                        </div><!-- /.box-header -->
+                        <div class="box-body">
+                            <div id="callstack" style="min-height: 400px;border:1px #adaeaf solid;"></div>
+                        </div>
+                        <div class="box-footer clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </aside>
+</div>
+
+
+<script type="text/javascript" src="/resources/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/resources/js/datatables/jquery.dataTables.js"></script>
+<script type="text/javascript" src="/resources/js/datatables/dataTables.bootstrap.js"></script>
+<script type="text/javascript" src="/resources/js/app.js"></script>
+
+
+<script type="text/javascript" src="/resources/js/SlickGrid-2.3.2/lib/jquery.event.drag-2.2.js"></script>
+<script type="text/javascript" src="/resources/js/SlickGrid-2.3.2/lib/jquery-ui-1.11.3.min.js"></script>
+<script type="text/javascript" src="/resources/js/SlickGrid-2.3.2/lib/firebugx.js"></script>
+<script type="text/javascript" src="/resources/js/SlickGrid-2.3.2/slick.core.js"></script>
+<script type="text/javascript" src="/resources/js/SlickGrid-2.3.2/slick.formatters.js"></script>
+<script type="text/javascript" src="/resources/js/SlickGrid-2.3.2/slick.editors.js"></script>
+<script type="text/javascript" src="/resources/js/SlickGrid-2.3.2/slick.grid.js"></script>
+<script type="text/javascript" src="/resources/js/SlickGrid-2.3.2/slick.dataview.js"></script>
+<script type="text/javascript" src="/resources/js/SlickGrid-2.3.2/plugins/slick.rowselectionmodel.js"></script>
+<script type="text/javascript" src="/resources/js/bigscatterchart/js/date.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        var dataTable = $('#example2').dataTable({});
+        dataTable.$('tr').click(function () {
+            var _this = $(this);
+            _this.addClass("active").siblings().removeClass("active");
+            var appName = _this.attr("appName");
+            var traceid = _this.attr("traceid");
+            loadCallStack('callstack', traceid, appName);
+        });
+    });
+
+
+    var PercentFormatter = function (row, cell, value, columnDef, dataContext) {
+        if (value == null || value === "") {
+            return "";
+        }
+
+        var color;
+
+        if (value < 30) {
+            color = "green";
+        } else if (value < 70) {
+            color = "#d8730f";
+        } else {
+            color = "red";
+        }
+
+        return "<span class='percent-complete-bar' style='background:" + color + ";width:" + value + "%'></span>";
+    }
+
+    function loadCallStack(domid, traceid, appName) {
+        var dom = document.getElementById(domid);
+
+        var grid, dataView;
+
+        $.getJSON('/index/callstack', {"traceID": traceid, "appName": appName}, function (data) {
+            window.callStacks = [];
+
+            var parents = [];
+            var totalTime = data[0].duration * 1.0;
+
+            $.each(data, function (i, s) {
+                var d = (window.callStacks[i] = {});
+
+                d["id"] = "id_" + i;
+                d["indent"] = s.indent;
+
+                var parent = null;
+                if (i > 0) {
+                    if (d["indent"] > window.callStacks[i - 1].indent) {
+                        parents.push(i - 1);
+                    } else if (d["indent"] < window.callStacks[i - 1].indent) {
+                        parents.pop();
+                    }
+
+                }
+                if (parents.length > 0) {
+                    parent = parents[parents.length - 1];
+                }
+
+                d["parent"] = parent;
+
+                d["method"] = s.methodName;
+                d["params"] = s.paramStr;
+                d["logTime"] = new Date(s.logTime).toString('HH:mm:ss');
+                d["timeCost"] = s.duration;
+                d["timePercent"] = Math.round(s.duration / totalTime * 100);
+                d["result"] = (s.result == "0" ? "success" : "fail");
+                d["exception"] = s.exception;
+                d["type"] = s.type;
+                d["appName"] = s.appName;
+            });
+
+            var treeFilter = function (item) {
+                var result = true;
+                if (item.parent) {
+                    var parent = window.callStacks[item.parent];
+                    while (parent) {
+                        if (parent._collapsed) {
+                            result = false;
+                        }
+                        parent = window.callStacks[parent.parent];
+                    }
+                }
+                return result;
+            }
+
+
+            var treeFormatter = function (row, cell, value, columnDef, dataContext) {
+                var html = [];
+                var idx = dataView.getIdxById(dataContext.id);
+
+                html.push("<span style='display:inline-block;height:1px;width:" + (15 * dataContext["indent"]) + "px'></span>");
+                if (window.callStacks[idx + 1] && window.callStacks[idx + 1].indent > window.callStacks[idx].indent) {
+                    if (dataContext._collapsed) {
+                        html.push(" <span class='toggle expand'></span>&nbsp;");
+                    } else {
+                        html.push(" <span class='toggle collapse'></span>&nbsp;");
+                    }
+                } else {
+                    html.push(" <span class='toggle'></span>&nbsp;");
+                }
+
+                html.push(value);
+
+                return html.join('');
+            }
+
+            dataView = new Slick.Data.DataView({inlineFilters: true});
+            dataView.beginUpdate();
+            dataView.setItems(window.callStacks);
+            dataView.setFilter(treeFilter);
+            dataView.getItemMetadata = function (row) {
+                var o = {cssClasses: ""};
+                return o;
+            };
+            dataView.endUpdate();
+
+
+            var options = {
+                editable: true,
+                enableCellNavigation: true,
+//                enableColumnReorder: true,
+                enableTextSelectionOnCells: true,
+                autoHeight: true,
+//                topPanelHeight: 300,
+//                headerRowHeight:300,
+                rowHeight: 25
+            };
+
+            var columns = [
+                {
+                    id: "method",
+                    name: "Method",
+                    field: "method",
+                    width: 500,
+                    formatter: treeFormatter,
+                    editor: Slick.Editors.Text
+                },
+                {id: "argument", name: "Argument", field: "params", width: 300, editor: Slick.Editors.Text},
+                {id: "start-time", name: "Start Time", field: "logTime", width: 90},
+                {id: "timeCost", name: "Exec(ms)", field: "timeCost", width: 70, cssClass: "right-align"},
+                {
+                    id: "time-percent",
+                    name: "Exec(%)",
+                    field: "timePercent",
+                    width: 100,
+                    formatter: PercentFormatter
+                },
+                {
+                    id: "result", name: "Invoke Result", field: "result", width: 100
+                },
+                {
+                    id: "exception", name: "Exception", field: "exception", width: 150
+                },
+                {id: "api-type", name: "Type", field: "type", width: 100},
+                {id: "app-name", name: "AppName", field: "appName", width: 150}
+            ];
+
+            grid = new Slick.Grid(dom, dataView, columns, options);
+            grid.setSelectionModel(new Slick.RowSelectionModel());
+
+            grid.onClick.subscribe(function (e, args) {
+                var item;
+                if ($(e.target).hasClass("toggle")) {
+                    item = dataView.getItem(args.row);
+                    console.info(item._collapsed);
+                    if (item) {
+                        if (!item._collapsed) {
+                            item._collapsed = true;
+                        } else {
+                            item._collapsed = false;
+                        }
+
+                        dataView.updateItem(item.id, item);
+                    }
+                    e.stopImmediatePropagation();
+                }
+            });
+
+            dataView.onRowCountChanged.subscribe(function (e, args) {
+                grid.updateRowCount();
+                grid.render();
+            });
+
+            dataView.onRowsChanged.subscribe(function (e, args) {
+                grid.invalidateRows(args.rows);
+                grid.render();
+            });
+
+        });
+
+
+    }
+</script>
+
+</body>
+</html>

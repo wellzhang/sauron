@@ -1,0 +1,11 @@
+package com.feng.sauron.client.plugin.mybatis.interceptor;
+
+/**
+ * @author wei.wang@fengjr.com
+ * @version 创建时间：2016年10月27日 下午8:29:32
+ * 
+ */
+public interface MybatisInterceptorTracerName {
+	public final static String TRACERNAME_STRING = "MybatisInterceptor";
+
+}

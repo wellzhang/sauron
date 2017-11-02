@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+	   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+       http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.1.xsd">
+	<!-- Activates scanning of @Autowired -->
+	<context:annotation-config />
+	<!-- Activates scanning of @Repository and @Service -->
+	<context:component-scan base-package="com.feng.sauron.warning" />
+	<task:annotation-driven />
+
+	<task:scheduled-tasks>
+		<!-- <task:scheduled ref="WarningTask" method="readDataFromInfluxdb" cron="0/10 * * * * *"/> -->
+		<task:scheduled ref="WarningTask" method="readDataFromInfluxdb" cron="0 0/1 * * * *" />
+		<task:scheduled ref="h5WarningTask" method="readDataFromInfluxdb" cron="0 0/1 * * * *" />
+	</task:scheduled-tasks>
+
+
+	<bean id="WarningTask" class="com.feng.sauron.warning.task.WarningTask">
+		<property name="dbName" value="${influxdb.app.dbname}" />
+	</bean>
+
+	<bean id="h5WarningTask" class="com.feng.sauron.warning.task.H5WarningTask">
+	</bean>
+	
+	
+
+	<bean id="CodeBulkTask" name="CodeBulkTpTask" class="com.feng.sauron.warning.task.WarningTask">
+		<property name="dbName" value="${influxdb.app.dbname}" />
+		<property name="table" value="sauron_codebulk" />
+		<property name="ruleType" value="4" /><!--self custom -->
+	</bean>
+
+	<bean id="RunHttpMonitorTask" class="com.feng.sauron.warning.task.RunHttpMonitorTask"></bean>
+
+
+
+
+	<task:scheduled-tasks>
+		<task:scheduled ref="CodeBulkTask" method="readDataFromInfluxdb" cron="0 0/1 * * * *" />
+	</task:scheduled-tasks>
+
+	<bean id="CodeBulkAlarmWarningTask" name="CodeBulkAlarmWarningTask" class="com.feng.sauron.warning.task.CodeBulkAlarmWarningTask">
+	</bean>
+	<task:scheduled-tasks>
+		<task:scheduled ref="CodeBulkAlarmWarningTask" method="run" cron="0 0/1 * * * *" />
+	</task:scheduled-tasks>
+	<task:scheduled-tasks>
+		<task:scheduled ref="RunHttpMonitorTask" method="run" cron="0 0/1 * * * *" />
+	</task:scheduled-tasks>
+
+	<bean id="ExceptiongWarningTask" class="com.feng.sauron.warning.task.ExceptiongWarningTask">
+	</bean>
+
+	<task:scheduled-tasks>
+		<task:scheduled ref="ExceptiongWarningTask" method="run" cron="0 0/1 * * * *" />
+	</task:scheduled-tasks>
+
+	<bean id="MqExcepteWarningTask" class="com.feng.sauron.warning.task.MqExcepteWarningTask">
+	</bean>
+
+	<task:scheduled-tasks>
+		<task:scheduled ref="MqExcepteWarningTask" method="run" cron="0 0/1 * * * *" />
+	</task:scheduled-tasks>
+
+
+	<bean id="zkRetryPolicy" class="org.apache.curator.retry.ExponentialBackoffRetry">
+		<constructor-arg value="1000" />
+		<constructor-arg value="3" />
+	</bean>
+	<bean id="CuratorFrameWorkClient" class="org.apache.curator.framework.CuratorFrameworkFactory"
+		factory-method="newClient">
+		<constructor-arg value="${zookeeper.servers}" />
+		<constructor-arg ref="zkRetryPolicy" />
+	</bean>
+	<bean id="LeaderSelectionClient" class="com.feng.sauron.warning.task.LeaderSelectionClient"
+		destroy-method="close">
+		<constructor-arg ref="CuratorFrameWorkClient" />
+		<constructor-arg value="/sauron/warning/election" />
+	</bean>
+
+
+
+
+</beans>

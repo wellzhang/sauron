@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.feng.sauron.warning.dao.StrategyTemMapper" >
+  <resultMap id="BaseResultMap" type="com.feng.sauron.warning.domain.StrategyTem" >
+    <id column="template" property="template" jdbcType="VARCHAR" />
+    <result column="strategy_id" property="strategyId" jdbcType="BIGINT" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    template, strategy_id, content, channel_id, create_time, status
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_strategy_tem
+    where template = #{template,jdbcType=VARCHAR}
+  </select>
+   <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_strategy_tem
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from tb_strategy_tem
+    where template = #{template,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.feng.sauron.warning.domain.StrategyTem" >
+    insert into tb_strategy_tem (template, strategy_id, content, 
+      channel_id, create_time, status
+      )
+    values (#{template,jdbcType=VARCHAR}, #{strategyId,jdbcType=BIGINT}, #{content,jdbcType=VARCHAR}, 
+      #{channelId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.feng.sauron.warning.domain.StrategyTem" >
+    insert into tb_strategy_tem
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="template != null" >
+        template,
+      </if>
+      <if test="strategyId != null" >
+        strategy_id,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="channelId != null" >
+        channel_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="template != null" >
+        #{template,jdbcType=VARCHAR},
+      </if>
+      <if test="strategyId != null" >
+        #{strategyId,jdbcType=BIGINT},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="channelId != null" >
+        #{channelId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.feng.sauron.warning.domain.StrategyTem" >
+    update tb_strategy_tem
+    <set >
+      <if test="strategyId != null" >
+        strategy_id = #{strategyId,jdbcType=BIGINT},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="channelId != null" >
+        channel_id = #{channelId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where template = #{template,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.feng.sauron.warning.domain.StrategyTem" >
+    update tb_strategy_tem
+    set strategy_id = #{strategyId,jdbcType=BIGINT},
+      content = #{content,jdbcType=VARCHAR},
+      channel_id = #{channelId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER}
+    where template = #{template,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectByPager" resultMap="BaseResultMap">
+    SELECT *
+    FROM tb_strategy_tem
+    WHERE 1 = 1
+    <if test="strategyId != 0">
+      AND strategy_id = #{strategyId}
+    </if>
+    <if test="template != null and template != ''">
+      AND template = #{template}
+    </if>
+    <if test="channelId != null and channelId != ''">
+      AND channel_id = #{channelId}
+    </if>
+    ORDER BY id
+    LIMIT #{startIndx},#{pageSize}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer">
+    SELECT count(*)
+    FROM tb_strategy_tem
+    WHERE 1 = 1
+    <if test="strategyId != 0">
+      AND strategy_id = #{strategyId}
+    </if>
+    <if test="template != null and template != ''">
+      AND template = #{template}
+    </if>
+    <if test="channelId != null and channelId != ''">
+      AND channel_id = #{channelId}
+    </if>
+  </select>
+</mapper>

@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.feng.sauron.warning.dao.StrategyMapper" >
+  <resultMap id="BaseResultMap" type="com.feng.sauron.warning.domain.Strategy" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="stgy_name" property="stgyName" jdbcType="VARCHAR" />
+    <result column="min_interval" property="minInterval" jdbcType="INTEGER" />
+    <result column="warn_count_with_time" property="warnCountWithTime" jdbcType="INTEGER" />
+    <result column="warn_max_count" property="warnMaxCount" jdbcType="INTEGER" />
+    <result column="warn_days_in_week" property="warnDaysInWeek" jdbcType="VARCHAR" />
+    <result column="start_time_in_day" property="startTimeInDay" jdbcType="VARCHAR" />
+    <result column="end_time_in_day" property="endTimeInDay" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="creator_id" property="creatorId" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="bak_num" property="bakNum" jdbcType="BIGINT" />
+    <result column="bak_char" property="bakChar" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, stgy_name, min_interval, warn_count_with_time, warn_max_count, warn_days_in_week, 
+    start_time_in_day, end_time_in_day, create_time, creator_id, status, bak_num, bak_char
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_strategy
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from tb_strategy
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.feng.sauron.warning.domain.Strategy" >
+  
+  <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+			SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+  
+    insert into tb_strategy (id, stgy_name, min_interval, 
+      warn_count_with_time, warn_max_count, warn_days_in_week, 
+      start_time_in_day, end_time_in_day, create_time, 
+      creator_id, status, bak_num, 
+      bak_char)
+    values (#{id,jdbcType=BIGINT}, #{stgyName,jdbcType=VARCHAR}, #{minInterval,jdbcType=INTEGER}, 
+      #{warnCountWithTime,jdbcType=INTEGER}, #{warnMaxCount,jdbcType=INTEGER}, #{warnDaysInWeek,jdbcType=VARCHAR}, 
+      #{startTimeInDay,jdbcType=VARCHAR}, #{endTimeInDay,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{creatorId,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, #{bakNum,jdbcType=BIGINT}, 
+      #{bakChar,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.feng.sauron.warning.domain.Strategy" >
+  
+  <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+			SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+    insert into tb_strategy
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="stgyName != null" >
+        stgy_name,
+      </if>
+      <if test="minInterval != null" >
+        min_interval,
+      </if>
+      <if test="warnCountWithTime != null" >
+        warn_count_with_time,
+      </if>
+      <if test="warnMaxCount != null" >
+        warn_max_count,
+      </if>
+      <if test="warnDaysInWeek != null" >
+        warn_days_in_week,
+      </if>
+      <if test="startTimeInDay != null" >
+        start_time_in_day,
+      </if>
+      <if test="endTimeInDay != null" >
+        end_time_in_day,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="creatorId != null" >
+        creator_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="bakNum != null" >
+        bak_num,
+      </if>
+      <if test="bakChar != null" >
+        bak_char,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="stgyName != null" >
+        #{stgyName,jdbcType=VARCHAR},
+      </if>
+      <if test="minInterval != null" >
+        #{minInterval,jdbcType=INTEGER},
+      </if>
+      <if test="warnCountWithTime != null" >
+        #{warnCountWithTime,jdbcType=INTEGER},
+      </if>
+      <if test="warnMaxCount != null" >
+        #{warnMaxCount,jdbcType=INTEGER},
+      </if>
+      <if test="warnDaysInWeek != null" >
+        #{warnDaysInWeek,jdbcType=VARCHAR},
+      </if>
+      <if test="startTimeInDay != null" >
+        #{startTimeInDay,jdbcType=VARCHAR},
+      </if>
+      <if test="endTimeInDay != null" >
+        #{endTimeInDay,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorId != null" >
+        #{creatorId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="bakNum != null" >
+        #{bakNum,jdbcType=BIGINT},
+      </if>
+      <if test="bakChar != null" >
+        #{bakChar,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.feng.sauron.warning.domain.Strategy" >
+    update tb_strategy
+    <set >
+      <if test="stgyName != null" >
+        stgy_name = #{stgyName,jdbcType=VARCHAR},
+      </if>
+      <if test="minInterval != null" >
+        min_interval = #{minInterval,jdbcType=INTEGER},
+      </if>
+      <if test="warnCountWithTime != null" >
+        warn_count_with_time = #{warnCountWithTime,jdbcType=INTEGER},
+      </if>
+      <if test="warnMaxCount != null" >
+        warn_max_count = #{warnMaxCount,jdbcType=INTEGER},
+      </if>
+      <if test="warnDaysInWeek != null" >
+        warn_days_in_week = #{warnDaysInWeek,jdbcType=VARCHAR},
+      </if>
+      <if test="startTimeInDay != null" >
+        start_time_in_day = #{startTimeInDay,jdbcType=VARCHAR},
+      </if>
+      <if test="endTimeInDay != null" >
+        end_time_in_day = #{endTimeInDay,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorId != null" >
+        creator_id = #{creatorId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="bakNum != null" >
+        bak_num = #{bakNum,jdbcType=BIGINT},
+      </if>
+      <if test="bakChar != null" >
+        bak_char = #{bakChar,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.feng.sauron.warning.domain.Strategy" >
+    update tb_strategy
+    set stgy_name = #{stgyName,jdbcType=VARCHAR},
+      min_interval = #{minInterval,jdbcType=INTEGER},
+      warn_count_with_time = #{warnCountWithTime,jdbcType=INTEGER},
+      warn_max_count = #{warnMaxCount,jdbcType=INTEGER},
+      warn_days_in_week = #{warnDaysInWeek,jdbcType=VARCHAR},
+      start_time_in_day = #{startTimeInDay,jdbcType=VARCHAR},
+      end_time_in_day = #{endTimeInDay,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      creator_id = #{creatorId,jdbcType=BIGINT},
+      status = #{status,jdbcType=INTEGER},
+      bak_num = #{bakNum,jdbcType=BIGINT},
+      bak_char = #{bakChar,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectAll" resultMap="BaseResultMap">
+    SELECT *
+    FROM tb_strategy
+  </select>
+
+  <select id="selectByPager" resultMap="BaseResultMap">
+    SELECT *
+    FROM tb_strategy
+    WHERE 1 = 1
+    <if test="strategyId != 0">
+      AND id = #{strategyId}
+    </if>
+    <if test="stgyName != null and stgyName != ''">
+      AND stgy_name = #{stgyName}
+    </if>
+    ORDER BY id
+    LIMIT #{startIndx},#{pageSize}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer">
+    SELECT count(*)
+    FROM tb_strategy
+    WHERE 1 = 1
+    <if test="strategyId != 0">
+      AND id = #{strategyId}
+    </if>
+    <if test="stgyName != null and stgyName != ''">
+      AND stgy_name = #{stgyName}
+    </if>
+  </select>
+</mapper>

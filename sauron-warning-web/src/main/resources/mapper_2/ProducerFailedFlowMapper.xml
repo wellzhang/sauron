@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.feng.sauron.warning.dao2.ProducerFailedFlowMapper" >
+  <resultMap id="BaseResultMap" type="com.feng.sauron.warning.domain.ProducerFailedFlow" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="clientIp" property="clientip" jdbcType="VARCHAR" />
+    <result column="instanceName" property="instancename" jdbcType="VARCHAR" />
+    <result column="namesrvAddr" property="namesrvaddr" jdbcType="VARCHAR" />
+    <result column="pgroup" property="pgroup" jdbcType="VARCHAR" />
+    <result column="topic" property="topic" jdbcType="VARCHAR" />
+    <result column="tag" property="tag" jdbcType="VARCHAR" />
+    <result column="mqkey" property="mqkey" jdbcType="VARCHAR" />
+    <result column="body" property="body" jdbcType="VARCHAR" />
+    <result column="reason" property="reason" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="utime" property="utime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, clientIp, instanceName, namesrvAddr, pgroup, topic, tag, mqkey, body, reason, 
+    status, ctime, utime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from m_producer_failedflow
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectWarning" resultMap="BaseResultMap" >
+    SELECT id, topic, clientIp FROM m_producer_failedflow WHERE STATUS=1 AND (TO_DAYS(NOW())-TO_DAYS(ctime)) &lt;=1
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from m_producer_failedflow
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.feng.sauron.warning.domain.ProducerFailedFlow" >
+    insert into m_producer_failedflow (id, clientIp, instanceName, 
+      namesrvAddr, pgroup, topic, 
+      tag, mqkey, body, reason, 
+      status, ctime, utime
+      )
+    values (#{id,jdbcType=BIGINT}, #{clientip,jdbcType=VARCHAR}, #{instancename,jdbcType=VARCHAR}, 
+      #{namesrvaddr,jdbcType=VARCHAR}, #{pgroup,jdbcType=VARCHAR}, #{topic,jdbcType=VARCHAR}, 
+      #{tag,jdbcType=VARCHAR}, #{mqkey,jdbcType=VARCHAR}, #{body,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{ctime,jdbcType=TIMESTAMP}, #{utime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.feng.sauron.warning.domain.ProducerFailedFlow" >
+    insert into m_producer_failedflow
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="clientip != null" >
+        clientIp,
+      </if>
+      <if test="instancename != null" >
+        instanceName,
+      </if>
+      <if test="namesrvaddr != null" >
+        namesrvAddr,
+      </if>
+      <if test="pgroup != null" >
+        pgroup,
+      </if>
+      <if test="topic != null" >
+        topic,
+      </if>
+      <if test="tag != null" >
+        tag,
+      </if>
+      <if test="mqkey != null" >
+        mqkey,
+      </if>
+      <if test="body != null" >
+        body,
+      </if>
+      <if test="reason != null" >
+        reason,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="ctime != null" >
+        ctime,
+      </if>
+      <if test="utime != null" >
+        utime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="clientip != null" >
+        #{clientip,jdbcType=VARCHAR},
+      </if>
+      <if test="instancename != null" >
+        #{instancename,jdbcType=VARCHAR},
+      </if>
+      <if test="namesrvaddr != null" >
+        #{namesrvaddr,jdbcType=VARCHAR},
+      </if>
+      <if test="pgroup != null" >
+        #{pgroup,jdbcType=VARCHAR},
+      </if>
+      <if test="topic != null" >
+        #{topic,jdbcType=VARCHAR},
+      </if>
+      <if test="tag != null" >
+        #{tag,jdbcType=VARCHAR},
+      </if>
+      <if test="mqkey != null" >
+        #{mqkey,jdbcType=VARCHAR},
+      </if>
+      <if test="body != null" >
+        #{body,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null" >
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="utime != null" >
+        #{utime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.feng.sauron.warning.domain.ProducerFailedFlow" >
+    update m_producer_failedflow
+    <set >
+      <if test="clientip != null" >
+        clientIp = #{clientip,jdbcType=VARCHAR},
+      </if>
+      <if test="instancename != null" >
+        instanceName = #{instancename,jdbcType=VARCHAR},
+      </if>
+      <if test="namesrvaddr != null" >
+        namesrvAddr = #{namesrvaddr,jdbcType=VARCHAR},
+      </if>
+      <if test="pgroup != null" >
+        pgroup = #{pgroup,jdbcType=VARCHAR},
+      </if>
+      <if test="topic != null" >
+        topic = #{topic,jdbcType=VARCHAR},
+      </if>
+      <if test="tag != null" >
+        tag = #{tag,jdbcType=VARCHAR},
+      </if>
+      <if test="mqkey != null" >
+        mqkey = #{mqkey,jdbcType=VARCHAR},
+      </if>
+      <if test="body != null" >
+        body = #{body,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null" >
+        reason = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="utime != null" >
+        utime = #{utime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.feng.sauron.warning.domain.ProducerFailedFlow" >
+    update m_producer_failedflow
+    set clientIp = #{clientip,jdbcType=VARCHAR},
+      instanceName = #{instancename,jdbcType=VARCHAR},
+      namesrvAddr = #{namesrvaddr,jdbcType=VARCHAR},
+      pgroup = #{pgroup,jdbcType=VARCHAR},
+      topic = #{topic,jdbcType=VARCHAR},
+      tag = #{tag,jdbcType=VARCHAR},
+      mqkey = #{mqkey,jdbcType=VARCHAR},
+      body = #{body,jdbcType=VARCHAR},
+      reason = #{reason,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      utime = #{utime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
