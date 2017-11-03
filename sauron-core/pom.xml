@@ -16,7 +16,7 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>fengjr-sauron</groupId>
+			<groupId>com.wangwei.cs</groupId>
 			<artifactId>sauron-annotations</artifactId>
 			<version>3.0-SNAPSHOT</version>
 		</dependency>
