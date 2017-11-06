@@ -159,16 +159,12 @@
 	</dependencies>
 
 	<build>
+		<!--<finalName>sauron-core</finalName>-->
 		<plugins>
 			<plugin>
 				<artifactId>maven-jar-plugin</artifactId>
 				<configuration>
 					<classesDirectory>target/classes/</classesDirectory>
-					<archive>
-						<manifestFile>
-							src/main/resources/META-INF/MANIFEST.MF
-						</manifestFile>
-					</archive>
 				</configuration>
 			</plugin>
 			<plugin>

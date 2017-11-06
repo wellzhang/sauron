@@ -158,7 +158,7 @@ public class JavaAgentMain {
 
 	private String getAgentPath() {
 
-		String selfpath = this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile();
+		String selfpath = this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile().replace("core","agent");;
 
 		File file = new File(selfpath);
 

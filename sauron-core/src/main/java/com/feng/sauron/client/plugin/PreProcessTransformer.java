@@ -61,6 +61,9 @@ public class PreProcessTransformer implements ClassFileTransformer {
 		} catch (Exception e) {
 			System.err.println("Error weaving class [" + className + "] ..........");
 			e.printStackTrace();
+		}catch (Throwable e) {
+			System.err.println("Error weaving class [" + className + "] ..........");
+			e.printStackTrace();
 		} finally {
 			if (byteArrayClassPath != null) {
 				try {

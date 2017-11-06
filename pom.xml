@@ -15,8 +15,8 @@
         <!--<module>sauron-dao</module>-->
         <!--<module>sauron-commons</module>-->
         <module>sauron-annotations</module>
-        <!--<module>sauron-test</module>-->
-        <!--<module>sauron-test-web</module>-->
+        <module>sauron-test</module>
+        <module>sauron-test-web</module>
         <!--<module>sauron-warning-web</module>-->
     </modules>
 

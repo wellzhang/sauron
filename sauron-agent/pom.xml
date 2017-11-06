@@ -20,7 +20,7 @@
     </dependencies>
 
     <build>
-        <finalName>sauron-agent</finalName>
+        <!--<finalName>sauron-agent</finalName>-->
         <plugins>
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>

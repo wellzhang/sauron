@@ -19,14 +19,7 @@
         <param-value>classpath*:/*-config.xml</param-value>
     </context-param>
      
-    <servlet>
-        <servlet-name>rocketmq</servlet-name>
-        <servlet-class>com.fengjr.sauron.test.web.RocketMQServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>rocketmq</servlet-name>
-        <url-pattern>/rocketmq</url-pattern>
-    </servlet-mapping>
+
 
  
 

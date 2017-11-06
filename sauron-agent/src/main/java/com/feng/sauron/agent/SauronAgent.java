@@ -2,36 +2,52 @@ package com.feng.sauron.agent;
 
 import java.lang.instrument.Instrumentation;
 
-import com.feng.sauron.client.plugin.PreProcessTransformer;
-import com.feng.sauron.client.plugin.jvm.JvmTracer;
-import com.feng.sauron.client.plugin.jvm.SystemInfoTracer;
-import com.feng.sauron.utils.SauronLogUtils;
+//import com.feng.sauron.client.listener.Switch;
+//import com.feng.sauron.client.plugin.PreProcessTransformer;
+//import com.feng.sauron.client.plugin.jvm.JvmTracer;
+//import com.feng.sauron.client.plugin.jvm.SystemInfoTracer;
+//import com.feng.sauron.utils.SauronLogUtils;
 
 public class SauronAgent {
 
-	private static volatile Instrumentation instrumentation;
+    private static volatile Instrumentation instrumentation;
 
-	public static void premain(String options, Instrumentation inst) {
+    public static void premain(String options, Instrumentation inst) {
 
-		SauronLogUtils.run();
+        instrumentation = inst;
 
-		JvmTracer.run();
+        if ("web".equalsIgnoreCase(options)) {
 
-		SystemInfoTracer.run();
+            System.out.println("sauron agent init by web");
 
-		instrumentation = inst;
+        } else if ("native".equalsIgnoreCase(options))  {
 
-		inst.addTransformer(new PreProcessTransformer());
+            System.out.println("sauron agent init by native");
 
-		// CopyOfRedefineClasse.run();
+//            SauronLogUtils.run();
+//
+//            JvmTracer.run();
+//
+//            SystemInfoTracer.run();
+//
+//            inst.addTransformer(new PreProcessTransformer());
+//
+//            Switch.flag.set(false);
 
-	}
+            // CopyOfRedefineClasse.run();
 
-	public static void agentmain(String options, Instrumentation inst) {
-		instrumentation = inst;
-	}
+        }else {
+            throw new RuntimeException("please config options ,eg : -javaagent:D:/xxxx/sauron-agent.jar=web");
+        }
 
-	public static Instrumentation getInstrumentation() {
-		return instrumentation;
-	}
+
+    }
+
+    public static void agentmain(String options, Instrumentation inst) {
+        instrumentation = inst;
+    }
+
+    public static Instrumentation getInstrumentation() {
+        return instrumentation;
+    }
 }
