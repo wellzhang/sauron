@@ -50,8 +50,6 @@ public class SauronServletContainerInitializer implements ServletContainerInitia
 
                 SystemInfoTracer.run();
 
-                // CopyOfRedefineClasse.run();
-
                 System.err.println("sauron.init.success");
 
             } catch (Exception ex) {

@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  */
 public class WatchableConfigClient implements CuratorListener, ConnectionStateListener {
     public static final String NAMESPACE = "CONFIG_CENTER";
-    private static final String PROFILE_NAME = "config-center.properties";
+    private static final String PROFILE_NAME = "sauron-config.properties";
     private static final String ZOOKEEPER_SERVERS = "zookeeper.servers";
     private final static Logger log = LoggerFactory.getLogger(WatchableConfigClient.class);
     private static Lock lock = new ReentrantLock();
