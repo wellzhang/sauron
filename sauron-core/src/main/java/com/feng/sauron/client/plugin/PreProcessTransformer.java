@@ -9,11 +9,12 @@ import javassist.CtClass;
 
 /**
  * @author wei.wang@fengjr.com
- * @version 2016年10月28日 下午2:12:41
+ * @version 2015年10月28日 下午2:12:41
  * 
  */
 public class PreProcessTransformer implements ClassFileTransformer {
 
+	@Override
 	public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) {
 
 		ByteArrayClassPath byteArrayClassPath = null;

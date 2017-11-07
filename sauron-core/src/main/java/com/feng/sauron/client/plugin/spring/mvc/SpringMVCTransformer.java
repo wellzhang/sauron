@@ -14,7 +14,7 @@ import com.feng.sauron.client.plugin.AbstractTransformer;
 
 /**
  * @author wei.wang@fengjr.com
- * @version 创建时间：2016年10月26日 下午5:18:44
+ * @version 创建时间：2015年10月26日 下午5:18:44
  */
 public class SpringMVCTransformer extends AbstractTransformer implements SpringMVCTracerName {
 

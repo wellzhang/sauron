@@ -16,7 +16,7 @@ import com.feng.sauron.client.plugin.spring.mvc.SpringMVCTransformer;
 
 /**
  * @author wei.wang@fengjr.com
- * @version 2016年10月28日 下午2:13:49
+ * @version 2015年10月28日 下午2:13:49
  */
 public class TransformerFactory {
 

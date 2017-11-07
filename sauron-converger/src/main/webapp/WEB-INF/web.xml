@@ -5,9 +5,7 @@
     <display-name>sauron-converger</display-name>
     
     
-     <listener>
-        <listener-class>com.feng.sauron.client.listener.SauronLoadTimeWeavingListener</listener-class>
-    </listener>
+
     
     <listener>
         <listener-class>

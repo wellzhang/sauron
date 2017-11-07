@@ -4,7 +4,7 @@ import java.lang.management.ManagementFactory;
 
 /**
  * @author wei.wang@fengjr.com
- * @version 创建时间：2016年11月2日 下午4:22:06
+ * @version 创建时间：2015年11月2日 下午4:22:06
  * 
  */
 public class SauronUtils {

@@ -4,7 +4,7 @@ import java.net.URL;
 
 /**
  * @author wei.wang@fengjr.com
- * @version 创建时间：2016年11月9日 上午10:08:21
+ * @version 创建时间：2015年11月9日 上午10:08:21
  * 
  */
 public class WriteUrl {

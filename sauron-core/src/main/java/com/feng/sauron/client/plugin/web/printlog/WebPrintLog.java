@@ -9,7 +9,7 @@ import com.feng.sauron.client.plugin.TracerAdapterFactory;
 
 /**
  * @author wei.wang@fengjr.com
- * @version 创建时间：2016年10月31日 下午1:53:42
+ * @version 创建时间：2015年10月31日 下午1:53:42
  * 
  */
 public class WebPrintLog implements PrintTraceLog {

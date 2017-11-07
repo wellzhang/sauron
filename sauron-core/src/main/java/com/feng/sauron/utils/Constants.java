@@ -2,7 +2,7 @@ package com.feng.sauron.utils;
 
 /**
  * @author wei.wang@fengjr.com
- * @version 2016年11月2日 下午1:22:33
+ * @version 2015年11月2日 下午1:22:33
  * 
  */
 public final class Constants {

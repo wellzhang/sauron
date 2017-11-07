@@ -22,7 +22,7 @@ package com.feng.sauron.test.domain;
 //
 ///**
 // * @author wei.wang@fengjr.com
-// * @version 2016年11月15日 下午1:56:11
+// * @version 2015年11月15日 下午1:56:11
 // * 
 // */
 //public class CopyOfRedefineClasse {

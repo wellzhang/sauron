@@ -26,7 +26,7 @@ import com.feng.sauron.utils.SauronUtils;
 
 /**
  * @author wei.wang@fengjr.com
- * @version 2016年10月28日 上午11:02:04
+ * @version 2015年10月28日 上午11:02:04
  */
 public abstract class TracerAdapterFactory implements Tracer {
 

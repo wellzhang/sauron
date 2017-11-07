@@ -5,7 +5,7 @@ import com.feng.sauron.client.plugin.TracerAdapterFactory;
 
 /**
  * @author wei.wang@fengjr.com
- * @version 创建时间：2016年10月31日 上午11:45:46
+ * @version 创建时间：2015年10月31日 上午11:45:46
  * 
  */
 public class HttpRequestExecutorPrintLog implements PrintTraceLog {

@@ -20,7 +20,7 @@ import com.feng.sauron.client.plugin.httpclient.httpclient4.printlog.CloseableHt
 
 /**
  * @author wei.wang@fengjr.com
- * @version 创建时间：2016年10月26日 下午5:18:44
+ * @version 创建时间：2015年10月26日 下午5:18:44
  * 
  */
 public class HttpClient4Transformer extends AbstractTransformer implements HttpClient4TracerName {

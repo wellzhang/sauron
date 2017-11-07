@@ -20,7 +20,7 @@ public class SauronAgent {
 
             System.out.println("sauron agent init by web");
 
-        } else if ("native".equalsIgnoreCase(options)) {
+        } else if ("main".equalsIgnoreCase(options)) {
 
             System.out.println("sauron agent init by native");
 

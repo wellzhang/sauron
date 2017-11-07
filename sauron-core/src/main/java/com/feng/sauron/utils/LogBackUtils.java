@@ -17,7 +17,7 @@ import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 
 /**
  * @author wei.wang@fengjr.com
- * @version 2016年10月28日 下午6:20:21
+ * @version 2015年10月28日 下午6:20:21
  * 
  */
 public class LogBackUtils {

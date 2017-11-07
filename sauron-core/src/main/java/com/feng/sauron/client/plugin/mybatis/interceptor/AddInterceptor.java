@@ -4,7 +4,7 @@ import org.apache.ibatis.plugin.Interceptor;
 
 /**
  * @author wei.wang@fengjr.com
- * @version 2016年9月1日 下午2:09:51
+ * @version 2015年9月1日 下午2:09:51
  * 
  */
 public class AddInterceptor {

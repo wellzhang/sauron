@@ -34,7 +34,7 @@ import com.feng.sauron.warning.task.LeaderSelectionClient;
 
 /**
  * @author wei.wang@fengjr.com
- * @version 2016年5月11日 下午6:38:02
+ * @version 2015年5月11日 下午6:38:02
  * 
  */
 

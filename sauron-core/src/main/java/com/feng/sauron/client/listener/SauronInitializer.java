@@ -8,7 +8,7 @@ import java.net.URLClassLoader;
 
 /**
  * @author wei.wang@fengjr.com
- * @version 2016年11月15日 上午10:19:54
+ * @version 2015年11月15日 上午10:19:54
  */
 public class SauronInitializer {
 
