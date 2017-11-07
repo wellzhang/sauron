@@ -8,6 +8,11 @@ import com.feng.sauron.client.plugin.jvm.JvmTracer;
 import com.feng.sauron.client.plugin.jvm.SystemInfoTracer;
 import com.feng.sauron.utils.SauronLogUtils;
 
+/**
+ * @author wei.wang@fengjr.com
+ * @version 2015年11月9日 下午3:01:03
+ */
+
 public class SauronAgent {
 
     private static volatile Instrumentation instrumentation;
@@ -34,13 +39,9 @@ public class SauronAgent {
 
             Switch.FLAG.set(false);
 
-            // CopyOfRedefineClasse.run();
-
         } else {
             throw new RuntimeException("please config options ,eg : -javaagent:D:/xxxx/sauron-agent.jar=web");
         }
-
-
     }
 
     public static void agentmain(String options, Instrumentation inst) {
