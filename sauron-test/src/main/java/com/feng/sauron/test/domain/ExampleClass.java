@@ -2,14 +2,15 @@ package com.feng.sauron.test.domain;
 
 import java.util.Random;
 
+import com.wangwei.cs.sauron.annotations.TraceClass;
+import com.wangwei.cs.sauron.annotations.TraceMethod;
+import com.wangwei.cs.sauron.core.tracer.impl.SauronTracer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.feng.ipcenter.service.IPDataFileService;
-import com.feng.sauron.client.annotations.TraceClass;
-import com.feng.sauron.client.annotations.TraceMethod;
-import com.feng.sauron.tracerImpl.SauronTracer;
+
+
 
 @TraceClass
 public class ExampleClass {
@@ -21,9 +22,7 @@ public class ExampleClass {
 	@TraceMethod
 	public String testDubbo(ClassPathXmlApplicationContext context) throws Exception {
 
-		IPDataFileService bean = (IPDataFileService) context.getBean("ipDataFileService");
 
-		String find = bean.find("127.0.0.1");
 //		logger.info(""+System.nanoTime());
 		doSomething1();
 
@@ -33,7 +32,7 @@ public class ExampleClass {
 	@TraceMethod
 	public String doSomething1() throws Exception {
 
-		SauronTracer.start();
+
 
 		InnerClass innerClass = new InnerClass();
 		innerClass.printInner();

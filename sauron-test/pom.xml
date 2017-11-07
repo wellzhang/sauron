@@ -20,7 +20,7 @@
 
         <dependency>
             <groupId>com.wangwei.cs</groupId>
-            <artifactId>sauron-core</artifactId>
+            <artifactId>sauron-agent</artifactId>
             <version>3.0-SNAPSHOT</version>
         </dependency>
 

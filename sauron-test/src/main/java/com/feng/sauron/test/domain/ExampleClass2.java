@@ -2,9 +2,10 @@ package com.feng.sauron.test.domain;
 
 import java.lang.management.ManagementFactory;
 
-import com.feng.sauron.client.annotations.TraceClass;
-import com.feng.sauron.client.annotations.TraceMethod;
+
 import com.sun.management.OperatingSystemMXBean;
+import com.wangwei.cs.sauron.annotations.TraceClass;
+import com.wangwei.cs.sauron.annotations.TraceMethod;
 
 @TraceClass
 public class ExampleClass2 {
