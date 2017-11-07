@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 
 import com.wangwei.cs.sauron.core.config.SauronConfig;
 import com.wangwei.cs.sauron.core.config.WatchableConfigClient;
-import com.wangwei.cs.sauron.core.utils.SauronLogUtils;
+import com.wangwei.cs.sauron.core.log.SauronLog;
 import com.sun.management.OperatingSystemMXBean;
 
 /**
@@ -26,7 +26,7 @@ import com.sun.management.OperatingSystemMXBean;
 @SuppressWarnings("restriction")
 public class JvmTracer {
 
-    public final static Logger logger = SauronLogUtils.getSauronLogger();// 万能用法
+    public final static Logger logger = SauronLog.getSauronLogger();// 万能用法
 
     private static Thread thread = null;
 

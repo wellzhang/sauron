@@ -10,7 +10,7 @@ import com.wangwei.cs.sauron.core.client.plugin.jvm.JvmTracer;
 import com.wangwei.cs.sauron.core.client.plugin.jvm.SystemInfoTracer;
 import com.wangwei.cs.sauron.core.config.SauronConfig;
 import com.wangwei.cs.sauron.core.config.WatchableConfigClient;
-import com.wangwei.cs.sauron.core.utils.SauronLogUtils;
+import com.wangwei.cs.sauron.core.log.SauronLog;
 
 /**
  * @author wei.wang@fengjr.com
@@ -40,7 +40,7 @@ public class ServletContainerInitializer implements javax.servlet.ServletContain
 
                 ToolsJarInitializer.init();
 
-                SauronLogUtils.run();// 必须在最前面
+                SauronLog.run();// 必须在最前面
 
                 AgentMainInitializer.run();
 

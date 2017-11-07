@@ -21,7 +21,7 @@ import com.wangwei.cs.sauron.core.client.plugin.web.WebTracerAdapter;
 import com.wangwei.cs.sauron.core.config.SauronConfig;
 import com.wangwei.cs.sauron.core.tracer.Tracer;
 import com.wangwei.cs.sauron.core.utils.JsonUtils;
-import com.wangwei.cs.sauron.core.utils.SauronLogUtils;
+import com.wangwei.cs.sauron.core.log.SauronLog;
 import com.wangwei.cs.sauron.core.utils.SauronUtils;
 
 /**
@@ -31,7 +31,7 @@ import com.wangwei.cs.sauron.core.utils.SauronUtils;
 public abstract class AbstractTracerAdapterFactory implements Tracer {
 
     // public final static Logger logger = LoggerFactory.getLogger(AbstractTracerAdapterFactory.class);//当 当前系统使用的环境为 logback 的时候使用
-    public final static Logger logger = SauronLogUtils.getSauronLogger();// 万能用法
+    public final static Logger logger = SauronLog.getSauronLogger();// 万能用法
 
     protected Class<?> returnType;
     public Object returnValue;

@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
 public class InstrumentationInitializer {
 
 
-    private static final String JAVA_AGENT_CLASS_NAME = "com.feng.sauron.agent.SauronAgent";
+    private static final String JAVA_AGENT_CLASS_NAME = "com.wangwei.cs.sauron.agent.SauronAgent";
     private static Instrumentation inst = null;
 
 

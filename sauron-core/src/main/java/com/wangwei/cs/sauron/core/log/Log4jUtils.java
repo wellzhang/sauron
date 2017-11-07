@@ -1,6 +1,7 @@
-package com.wangwei.cs.sauron.core.utils;
+package com.wangwei.cs.sauron.core.log;
 
 import com.wangwei.cs.sauron.core.client.plugin.AbstractTracerAdapterFactory;
+import com.wangwei.cs.sauron.core.utils.SauronUtils;
 import org.apache.log4j.AsyncAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;

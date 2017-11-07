@@ -1,4 +1,4 @@
-package com.wangwei.cs.sauron.core.utils;
+package com.wangwei.cs.sauron.core.log;
 
 import com.wangwei.cs.sauron.core.client.plugin.AbstractTracerAdapterFactory;
 import org.slf4j.ILoggerFactory;
@@ -11,11 +11,11 @@ import org.slf4j.LoggerFactory;
  * 
  */
 
-public class SauronLogUtils {
+public class SauronLog {
 
 	private Logger sauronLogger;
 
-	private SauronLogUtils() {
+	private SauronLog() {
 
 		getLog();
 
@@ -43,13 +43,13 @@ public class SauronLogUtils {
 	}
 
 	private static class SauronLogInnerClass {
-		private static final SauronLogUtils SAURON_LOG_UTILS = new SauronLogUtils();
+		private static final SauronLog SAURON_LOG_UTILS = new SauronLog();
 	}
 
 	@SuppressWarnings("unused")
 	public static void run() {
 		try {
-			SauronLogUtils sauronLogUtils = SauronLogInnerClass.SAURON_LOG_UTILS;
+			SauronLog sauronLogUtils = SauronLogInnerClass.SAURON_LOG_UTILS;
 		} catch (Exception e) {
 			System.out.println("sauronLogUtils start error ...");
 			e.printStackTrace();

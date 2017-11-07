@@ -6,6 +6,8 @@ import com.wangwei.cs.sauron.core.tracer.impl.TimerTracer;
 
 public class SpringMVCTracerAdapter extends AbstractTracerAdapterFactory implements Tracer, SpringMVCTracerName {
 
+    public SpringMVCTracerAdapter() {
+    }
 
     private SpringMVCTracerAdapter(String spanId, String className, String methodName, String sourceAppName, Class<?>[] paramClazz, Object[] params) {
         this.spanId = spanId;

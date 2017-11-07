@@ -12,7 +12,7 @@ import sun.jvmstat.monitor.VmIdentifier;
 
 import com.wangwei.cs.sauron.core.config.SauronConfig;
 import com.wangwei.cs.sauron.core.utils.JsonUtils;
-import com.wangwei.cs.sauron.core.utils.SauronLogUtils;
+import com.wangwei.cs.sauron.core.log.SauronLog;
 import com.wangwei.cs.sauron.core.utils.SauronUtils;
 import com.sun.tools.attach.VirtualMachine;
 
@@ -24,7 +24,7 @@ import com.sun.tools.attach.VirtualMachine;
 public class SystemInfoTracer {
 
 	// public final static Logger logger = LoggerFactory.getLogger(AbstractTracerAdapterFactory.class);//当 当前系统使用的环境为 logback 的时候使用
-	public final static Logger logger = SauronLogUtils.getSauronLogger();// 万能用法
+	public final static Logger logger = SauronLog.getSauronLogger();// 万能用法
 
 	private SystemInfoTracer() {
 
