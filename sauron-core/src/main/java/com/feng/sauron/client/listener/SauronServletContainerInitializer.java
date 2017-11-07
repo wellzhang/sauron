@@ -2,9 +2,8 @@ package com.feng.sauron.client.listener;
 
 import java.util.Set;
 
-import javax.servlet.ServletContainerInitializer;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
+import javax.servlet.*;
+import javax.servlet.annotation.WebListener;
 
 import com.feng.sauron.client.plugin.PreProcessTransformer;
 import com.feng.sauron.client.plugin.jvm.JvmTracer;
@@ -16,47 +15,65 @@ import com.feng.sauron.utils.SauronLogUtils;
 /**
  * @author wei.wang@fengjr.com
  * @version 2016年11月15日 上午10:19:10
- * 
  */
-public class SauronServletContainerInitializer implements ServletContainerInitializer, Switch {
+@WebListener
+public class SauronServletContainerInitializer implements ServletContainerInitializer, ServletContextListener, Switch {
 
-	@Override
-	public void onStartup(Set<Class<?>> c, ServletContext ctx) throws ServletException {
+    @Override
+    public void onStartup(Set<Class<?>> c, ServletContext ctx) throws ServletException {
+        init();
+    }
 
-		if (flag.get()) {
+    @Override
+    public void contextInitialized(ServletContextEvent servletContextEvent) {
+        init();
+    }
 
-			try {//以下每个方法的顺序不要乱动，小心死锁 ，看似不影响，其实很重要
 
-				WatchableConfigClient.getInstance().get(SauronConfig.getAPP_NAME(), "jvm-switch", "ON");
+    private void init() {
 
-				SauronInitializer.init();
+        if (flag.get()) {
 
-				SauronLogUtils.run();
+            try {//以下每个方法的顺序不要乱动，小心死锁 ，看似不影响，其实很重要
 
-				JavaAgentMain.run();
+                WatchableConfigClient.getInstance().get(SauronConfig.getAPP_NAME(), "jvm-switch", "ON");
 
-				JavaAgentWeaver javaAgentWeaver = new JavaAgentWeaver();
+                SauronInitializer.init();
 
-				javaAgentWeaver.addTransformer(new PreProcessTransformer());
+                SauronLogUtils.run();// 必须在最前面
 
-				JvmTracer.run();
+                JavaAgentMain.run();
 
-				SystemInfoTracer.run();
+                JavaAgentWeaver javaAgentWeaver = new JavaAgentWeaver();
 
-				System.err.println("sauron.init.success");
+                javaAgentWeaver.addTransformer(new PreProcessTransformer());
 
-				// CallbackRedefineClasse.run();
+                JvmTracer.run();
 
-			} catch (Exception ex) {
-				System.err.println("sauron.init.failure");
-				ex.printStackTrace();
-			} catch (Throwable e) {
-				System.err.println("sauron.init.failure");
-				e.printStackTrace();
-			}
+                SystemInfoTracer.run();
 
-			flag.set(false);
-		}
-	}
+                // CopyOfRedefineClasse.run();
+
+                System.err.println("sauron.init.success");
+
+            } catch (Exception ex) {
+                System.err.println("sauron.init.failure");
+                ex.printStackTrace();
+            } catch (Throwable e) {
+                System.err.println("sauron.init.failure");
+                e.printStackTrace();
+            }
+
+            flag.set(false);
+        }
+    }
+
+
+    @Override
+    public void contextDestroyed(ServletContextEvent servletContextEvent) {
+        WatchableConfigClient.close();
+        System.err.println("ConfigClient Closed!");
+    }
+
 
 }
