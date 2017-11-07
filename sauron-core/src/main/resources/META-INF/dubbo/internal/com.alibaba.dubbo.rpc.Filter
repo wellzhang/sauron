@@ -1,1 +1,1 @@
-metricsFilter=com.feng.sauron.client.plugin.dubbo.DubboTransformer
+metricsFilter=com.wangwei.cs.sauron.core.client.plugin.dubbo.DubboTransformer

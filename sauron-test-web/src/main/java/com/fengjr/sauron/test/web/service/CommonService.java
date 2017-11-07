@@ -4,8 +4,8 @@ import java.util.Random;
 
 import org.springframework.stereotype.Service;
 
-import com.feng.sauron.client.annotations.TraceClass;
-import com.feng.sauron.client.annotations.TraceMethod;
+import com.wangwei.cs.sauron.annotations.TraceClass;
+import com.wangwei.cs.sauron.annotations.TraceMethod;
 
 @TraceClass
 @Service

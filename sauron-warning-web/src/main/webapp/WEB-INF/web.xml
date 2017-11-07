@@ -21,7 +21,7 @@
 	<!--<filter>-->
         <!--<filter-name>sauronFilter</filter-name>-->
         <!--<filter-class>-->
-            <!--com.feng.sauron.client.plugin.web.WebTransformer-->
+            <!--WebTransformer-->
         <!--</filter-class>-->
     <!--</filter>-->
     <!--<filter-mapping>-->
