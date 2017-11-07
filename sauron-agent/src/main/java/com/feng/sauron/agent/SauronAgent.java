@@ -2,11 +2,11 @@ package com.feng.sauron.agent;
 
 import java.lang.instrument.Instrumentation;
 
-//import com.feng.sauron.client.listener.Switch;
-//import com.feng.sauron.client.plugin.PreProcessTransformer;
-//import com.feng.sauron.client.plugin.jvm.JvmTracer;
-//import com.feng.sauron.client.plugin.jvm.SystemInfoTracer;
-//import com.feng.sauron.utils.SauronLogUtils;
+import com.feng.sauron.client.listener.Switch;
+import com.feng.sauron.client.plugin.PreProcessTransformer;
+import com.feng.sauron.client.plugin.jvm.JvmTracer;
+import com.feng.sauron.client.plugin.jvm.SystemInfoTracer;
+import com.feng.sauron.utils.SauronLogUtils;
 
 public class SauronAgent {
 
@@ -20,23 +20,23 @@ public class SauronAgent {
 
             System.out.println("sauron agent init by web");
 
-        } else if ("native".equalsIgnoreCase(options))  {
+        } else if ("native".equalsIgnoreCase(options)) {
 
             System.out.println("sauron agent init by native");
 
-//            SauronLogUtils.run();
-//
-//            JvmTracer.run();
-//
-//            SystemInfoTracer.run();
-//
-//            inst.addTransformer(new PreProcessTransformer());
-//
-//            Switch.flag.set(false);
+            SauronLogUtils.run();
+
+            JvmTracer.run();
+
+            SystemInfoTracer.run();
+
+            inst.addTransformer(new PreProcessTransformer());
+
+            Switch.flag.set(false);
 
             // CopyOfRedefineClasse.run();
 
-        }else {
+        } else {
             throw new RuntimeException("please config options ,eg : -javaagent:D:/xxxx/sauron-agent.jar=web");
         }
 

@@ -13,11 +13,7 @@
 
 
 
-		<dependency>
-			<groupId>com.feng.ipcenter.service</groupId>
-			<artifactId>feng-ipcenter-service</artifactId>
-			<version>1.0-SNAPSHOT</version>
-		</dependency>
+
 
 
 		<dependency>

@@ -44,9 +44,7 @@ public class SauronServletContainerInitializer implements ServletContainerInitia
 
                 JavaAgentMain.run();
 
-                JavaAgentWeaver javaAgentWeaver = new JavaAgentWeaver();
-
-                javaAgentWeaver.addTransformer(new PreProcessTransformer());
+                SauronInstrumentation.getInstance().addTransformer(new PreProcessTransformer());
 
                 JvmTracer.run();
 

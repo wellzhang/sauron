@@ -67,10 +67,10 @@ public class CallbackRedefineClasse {
             e2.printStackTrace();
         }
 
-        JavaAgentWeaver javaAgentWeaver = null;
+        SauronInstrumentation javaAgentWeaver = null;
 
         try {
-            javaAgentWeaver = new JavaAgentWeaver();
+            javaAgentWeaver = SauronInstrumentation.getInstance();
         } catch (Exception e1) {
             e1.printStackTrace();
         } catch (Throwable e1) {
@@ -82,7 +82,7 @@ public class CallbackRedefineClasse {
             return;
         }
 
-        Instrumentation instrumentation = javaAgentWeaver.getInstrumentation();
+        Instrumentation instrumentation = javaAgentWeaver.initInstrumentation();
 
         Class<?>[] allLoadedClasses = instrumentation.getAllLoadedClasses();
 

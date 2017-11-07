@@ -1,7 +1,5 @@
 package com.feng.sauron.client.listener;
 
-
-import com.feng.sauron.utils.SauronUtils;
 import com.sun.tools.attach.VirtualMachine;
 
 import java.lang.reflect.Method;
@@ -39,13 +37,13 @@ public class SauronInitializer {
         try {
             System.out.println(VirtualMachine.class.getName());
             System.out.println("tools.jar init success ...");
-            return;
         } catch (Exception e) {
+            System.err.println("tools.jar init error ...");
             e.printStackTrace();
         } catch (Throwable e) {
+            System.err.println("tools.jar init error ...");
             e.printStackTrace();
         }
-        System.err.println("tools.jar init error ...");
 
     }
 }
