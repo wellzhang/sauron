@@ -20,24 +20,23 @@ import com.feng.sauron.client.plugin.AbstractTransformer;
 public class AnnotationTransformer extends AbstractTransformer implements AnnotationTracerName {
 
 	private Logger logger = LoggerFactory.getLogger(AnnotationTransformer.class);
-
+	@Override
 	public boolean check(String fixedClassName, CtClass clazz) {
 
 		Object annotation = null;
 		try {
 			annotation = clazz.getAnnotation(TraceClass.class);
 		} catch (Exception e) {
-//			e.printStackTrace();
 		}
 		return annotation != null;
 	}
-
+	@Override
 	public byte[] transform(ClassLoader loader, String className, Class<?> clazz, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
 
 		String fixedClassName = className.replace("/", ".");
 		CtClass classToBeModified = null;
 		try {
-			classToBeModified = classPool.get(fixedClassName);
+			classToBeModified = CLASS_POOL.get(fixedClassName);
 
 			if (checkAndCatchException(fixedClassName, classToBeModified)) {
 
@@ -50,13 +49,13 @@ public class AnnotationTransformer extends AbstractTransformer implements Annota
 
 						TraceMethod annotation = (TraceMethod) ctMethod.getAnnotation(TraceMethod.class);
 						// 运行前处理
-						ctMethod.insertBefore(sauron_code_before_method_execute(TRACERNAME_STRING, fixedClassName, ctMethod.getLongName(), sourceAppName, annotation.isTraceParam()));
+						ctMethod.insertBefore(sauronCodeBeforeMethodExecute(TRACERNAME_STRING, fixedClassName, ctMethod.getLongName(), sourceAppName, annotation.isTraceParam()));
 						// 正常成功后处理
-						ctMethod.insertAfter(sauron_code_after_method_execute(fixedClassName, ctMethod.getLongName()), false);
+						ctMethod.insertAfter(sauronCodeAfterMethodExecute(fixedClassName, ctMethod.getLongName()), false);
 						// 异常捕捉处理
-						ctMethod.addCatch(sauron_code_catch_method_execute(fixedClassName, ctMethod.getLongName()), classPool.getCtClass("java.lang.Exception"));
+						ctMethod.addCatch(sauronCodeCatchMethodExecute(fixedClassName, ctMethod.getLongName()), CLASS_POOL.getCtClass("java.lang.Exception"));
 						// catch后的finally段处理
-						ctMethod.insertAfter(sauron_code_after_method_execute_finally(fixedClassName, ctMethod.getLongName()), true);
+						ctMethod.insertAfter(sauronCodeAfterMethodExecuteFinally(fixedClassName, ctMethod.getLongName()), true);
 
 					}
 

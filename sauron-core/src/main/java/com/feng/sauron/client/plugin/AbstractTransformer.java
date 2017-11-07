@@ -17,9 +17,9 @@ import javassist.NotFoundException;
  */
 public abstract class AbstractTransformer implements ClassFileTransformer {
 
-	public static final ClassPool classPool = ClassPool.getDefault();
+	public static final ClassPool CLASS_POOL = ClassPool.getDefault();
 
-	protected String sourceAppName = SauronConfig.getAPP_NAME();
+	protected String sourceAppName = SauronConfig.getAppName();
 
 	private static AtomicBoolean flag = new AtomicBoolean(true);
 
@@ -32,8 +32,8 @@ public abstract class AbstractTransformer implements ClassFileTransformer {
 	private static void insertClassPath() {
 
 		try {
-			classPool.insertClassPath(Thread.currentThread().getContextClassLoader().getResource("").getPath());
-			classPool.insertClassPath(new ClassClassPath(AbstractTransformer.class));
+			CLASS_POOL.insertClassPath(Thread.currentThread().getContextClassLoader().getResource("").getPath());
+			CLASS_POOL.insertClassPath(new ClassClassPath(AbstractTransformer.class));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -56,10 +56,18 @@ public abstract class AbstractTransformer implements ClassFileTransformer {
 		return check;
 	}
 
+	/**
+	 *
+	 * @param fixedClassName
+	 * @param clazz
+	 * @return
+	 * @throws Exception
+	 * @throws Throwable
+	 */
 	public abstract boolean check(String fixedClassName, CtClass clazz) throws Exception, Throwable;
 
 	// 运行前处理
-	public String sauron_code_before_method_execute(String tracerName, String className, String methodName, String sourceAppName, boolean isTraceParam) {
+	public String sauronCodeBeforeMethodExecute(String tracerName, String className, String methodName, String sourceAppName, boolean isTraceParam) {
 
 		if (isTraceParam) {
 			return "if(SauronSessionContext.isMethodShouldBeTrace(\"" + className + "\",\"" + methodName + "\"))"//
@@ -77,7 +85,7 @@ public abstract class AbstractTransformer implements ClassFileTransformer {
 	}
 
 	// 正常成功后处理
-	public String sauron_code_after_method_execute(String className, String methodName) {
+	public String sauronCodeAfterMethodExecute(String className, String methodName) {
 		return "if(SauronSessionContext.isMethodShouldBeTrace(\"" + className + "\",\"" + methodName + "\"))"//
 				+ "{" //
 				+ "   SauronSessionContext.getCurrentTracerAdapter().afterMethodExecute();"//
@@ -85,7 +93,7 @@ public abstract class AbstractTransformer implements ClassFileTransformer {
 	}
 
 	// 异常捕捉处理
-	public String sauron_code_catch_method_execute(String className, String methodName) {
+	public String sauronCodeCatchMethodExecute(String className, String methodName) {
 		return "if(SauronSessionContext.isMethodShouldBeTrace(\"" + className + "\",\"" + methodName + "\"))"//
 				+ "{" //
 				+ "   SauronSessionContext.getCurrentTracerAdapter().catchMethodException($e);" //
@@ -94,14 +102,14 @@ public abstract class AbstractTransformer implements ClassFileTransformer {
 	}
 
 	// catch后的finally段处理
-	public String sauron_code_after_method_execute_finally(String className, String methodName) {
+	public String sauronCodeAfterMethodExecuteFinally(String className, String methodName) {
 		return "if(SauronSessionContext.isMethodShouldBeTrace(\"" + className + "\",\"" + methodName + "\"))" //
 				+ "{" //
 				+ "   SauronSessionContext.getCurrentTracerAdapter().catchMethodExceptionFinally();" //
 				+ "}";//
 	}
 
-	public String sauron_code_after_method_execute_finally_with_return(String className, String methodName) {
+	public String sauronCodeAfterMethodExecuteFinallyWithReturn(String className, String methodName) {
 		return "if(SauronSessionContext.isMethodShouldBeTrace(\"" + className + "\",\"" + methodName + "\"))" //
 				+ "{" //
 				+ "   SauronSessionContext.getCurrentTracerAdapter().catchMethodExceptionFinally($type,$_);" //

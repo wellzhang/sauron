@@ -2,17 +2,17 @@ package com.feng.sauron.client.plugin.httpclient.httpclient4;
 
 import java.util.HashMap;
 
+import com.feng.sauron.client.plugin.AbstractTracerAdapterFactory;
 import org.apache.http.client.methods.HttpUriRequest;
 
 import com.feng.sauron.client.context.SauronSessionContext;
 import com.feng.sauron.client.plugin.PrintTraceLog;
-import com.feng.sauron.client.plugin.TracerAdapterFactory;
 import com.feng.sauron.config.SauronConfig;
 import com.feng.sauron.tracer.Tracer;
-import com.feng.sauron.tracerImpl.TimerTracer;
+import com.feng.sauron.tracer.impl.TimerTracer;
 import com.feng.sauron.utils.Constants;
 
-public class HttpClient4TracerAdapter extends TracerAdapterFactory implements HttpClient4TracerName {
+public class HttpClient4TracerAdapter extends AbstractTracerAdapterFactory implements HttpClient4TracerName {
 
 	public HttpClient4TracerAdapter() {
 	}
@@ -46,7 +46,7 @@ public class HttpClient4TracerAdapter extends TracerAdapterFactory implements Ht
 
 				httpUriRequest.setHeader(Constants.SAURON_REQUEST_TRACEID, SauronSessionContext.getTraceId());
 				httpUriRequest.setHeader(Constants.SAURON_REQUEST_SPANID, spanId);
-				httpUriRequest.setHeader(Constants.SAURON_REQUEST_SOURCE_APPNAME, SauronConfig.getAPP_NAME());
+				httpUriRequest.setHeader(Constants.SAURON_REQUEST_SOURCE_APPNAME, SauronConfig.getAppName());
 
 			}
 		} catch (Exception e) {

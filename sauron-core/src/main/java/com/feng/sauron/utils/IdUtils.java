@@ -35,7 +35,7 @@ public class IdUtils {
 
 	private static IdUtils idUtils;
 
-	private static long initialTime = 1479112463872l;
+	private static long initialTime = 1479112463872L;
 
 	static {
 		mac = getLocalMac();
@@ -102,13 +102,10 @@ public class IdUtils {
 			}
 			result = sb.toString();
 		} catch (SocketException e) {
-			// e.printStackTrace();
 			result = defaultMac();
 		} catch (UnknownHostException e) {
-			// e.printStackTrace();
 			result = defaultMac();
 		} catch (Exception e) {
-			// e.printStackTrace();
 			result = defaultMac();
 		}
 		return result;
@@ -137,7 +134,7 @@ public class IdUtils {
 		String mac = str + rd;
 		if (mac.length() < 12) {
 			int ph = 12 - mac.length();
-			for (int loop$ = 0; loop$ < ph; loop$++) {
+			for (int i = 0; i < ph; i++) {
 				mac += "0";
 			}
 		}

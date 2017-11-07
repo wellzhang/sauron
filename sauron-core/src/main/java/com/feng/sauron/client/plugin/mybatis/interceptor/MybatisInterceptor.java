@@ -36,7 +36,7 @@ public class MybatisInterceptor implements Interceptor, MybatisInterceptorTracer
 
 	@SuppressWarnings("unused")
 	private Properties properties;
-
+	@Override
 	public Object intercept(Invocation invocation) throws Throwable {
 
 		try {
@@ -58,19 +58,19 @@ public class MybatisInterceptor implements Interceptor, MybatisInterceptorTracer
 
 			String sql = getSql(configuration, boundSql, false);
 
-			String detail_sql = getSql(configuration, boundSql, true);
+			String detailSql = getSql(configuration, boundSql, true);
 
 			String methodName = sql;
 
 			Class<?>[] parameterTypes = new Class[] { String.class, String.class };
 
-			Object[] paramVal = new Object[] { mappedStatement.getId(), detail_sql };
+			Object[] paramVal = new Object[] { mappedStatement.getId(), detailSql };
 
 			if (SauronSessionContext.isTraceEntry()) {
 				SauronSessionContext.initSessionContext();
 			}
 
-			SauronSessionContext.allocCurrentTracerAdapter(TRACERNAME_STRING, className, methodName, SauronConfig.getAPP_NAME(), parameterTypes, paramVal);
+			SauronSessionContext.allocCurrentTracerAdapter(TRACERNAME_STRING, className, methodName, SauronConfig.getAppName(), parameterTypes, paramVal);
 			SauronSessionContext.getCurrentTracerAdapter().beforeMethodExecute();
 
 		} catch (Exception e1) {
@@ -155,11 +155,11 @@ public class MybatisInterceptor implements Interceptor, MybatisInterceptorTracer
 		}
 		return sql;
 	}
-
+	@Override
 	public Object plugin(Object target) {
 		return Plugin.wrap(target, this);
 	}
-
+	@Override
 	public void setProperties(Properties properties0) {
 		this.properties = properties0;
 	}

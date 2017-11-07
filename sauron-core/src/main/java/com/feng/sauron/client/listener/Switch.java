@@ -7,5 +7,5 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @version 创建时间：2015年11月10日 下午6:54:47
  */
 public interface Switch {
-    AtomicBoolean flag = new AtomicBoolean(true);
+    AtomicBoolean FLAG = new AtomicBoolean(true);
 }

@@ -33,8 +33,8 @@ public class CopyOfJdkHttpClientTransformer extends AbstractTransformer implemen
 
 	private void addPackageImport() {
 		// try {
-		// classPool.importPackage(SauronSessionContext.class.getName());
-		// classPool.importPackage("sun.net.www.protocol.http.HttpURLConnection");
+		// CLASS_POOL.importPackage(SauronSessionContext.class.getName());
+		// CLASS_POOL.importPackage("sun.net.www.protocol.http.HttpURLConnection");
 		// } catch (Exception e) {
 		// e.printStackTrace();
 		// }
@@ -64,18 +64,18 @@ public class CopyOfJdkHttpClientTransformer extends AbstractTransformer implemen
 		initTtraceClzMap();
 		return traceClzMap;
 	}
-
+	@Override
 	public boolean check(String fixedClassName, CtClass clazz) {
 		return traceClzMap.containsKey(fixedClassName);
 	}
-
+	@Override
 	public byte[] transform(ClassLoader classLoader, String className, Class<?> clazz, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
 
 		CtClass classToBeModified = null;
 		try {
 			String fixedClassName = className.replace("/", ".");
 
-			classToBeModified = classPool.get(fixedClassName);
+			classToBeModified = CLASS_POOL.get(fixedClassName);
 
 			if (check(fixedClassName, classToBeModified)) {
 
@@ -103,21 +103,18 @@ public class CopyOfJdkHttpClientTransformer extends AbstractTransformer implemen
 					if (flag) {
 
 						// 运行前处理
-						ctConstructor.insertBefore(sauron_code_before_method_execute(TRACERNAME_STRING, fixedClassName, methodName, sourceAppName, true));
+						ctConstructor.insertBefore(sauronCodeBeforeMethodExecute(TRACERNAME_STRING, fixedClassName, methodName, sourceAppName, true));
 						// 正常成功后处理
-						ctConstructor.insertAfter(sauron_code_after_method_execute(fixedClassName, methodName), false);
+						ctConstructor.insertAfter(sauronCodeAfterMethodExecute(fixedClassName, methodName), false);
 						// 异常捕捉处理
-						ctConstructor.addCatch(sauron_code_catch_method_execute(fixedClassName, methodName), classPool.getCtClass("java.lang.Exception"));
+						ctConstructor.addCatch(sauronCodeCatchMethodExecute(fixedClassName, methodName), CLASS_POOL.getCtClass("java.lang.Exception"));
 						// catch后的finally段处理
-						ctConstructor.insertAfter(sauron_code_after_method_execute_finally(fixedClassName, methodName), true);
+						ctConstructor.insertAfter(sauronCodeAfterMethodExecuteFinally(fixedClassName, methodName), true);
 					}
 				}
 				return classToBeModified.toBytecode();
 			}
 		} catch (NotFoundException e) {
-			// e.printStackTrace();
-			// 去掉类找不到时的报错，避免对输出过多错误。
-			// 找不到的一般都是lib或虚拟机自身不存在的类，比如自动代理出的类 不用处理
 		} catch (Exception e) {
 			logger.error("transform Exception ", e);
 		} finally {

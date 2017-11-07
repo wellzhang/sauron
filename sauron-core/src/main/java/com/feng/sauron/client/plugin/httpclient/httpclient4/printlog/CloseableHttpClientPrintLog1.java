@@ -5,7 +5,7 @@ import java.net.URI;
 import org.apache.http.client.methods.HttpUriRequest;
 
 import com.feng.sauron.client.plugin.PrintTraceLog;
-import com.feng.sauron.client.plugin.TracerAdapterFactory;
+import com.feng.sauron.client.plugin.AbstractTracerAdapterFactory;
 
 /**
  * @author wei.wang@fengjr.com
@@ -18,15 +18,15 @@ public class CloseableHttpClientPrintLog1 implements PrintTraceLog {
 	}
 
 	private static class InnerClass {
-		private static final CloseableHttpClientPrintLog1 Inner_Class = new CloseableHttpClientPrintLog1();
+		private static final CloseableHttpClientPrintLog1 INSTANCE = new CloseableHttpClientPrintLog1();
 	}
 
 	public static CloseableHttpClientPrintLog1 getInstances() {
-		return InnerClass.Inner_Class;
+		return InnerClass.INSTANCE;
 	}
 
 	@Override
-	public String print(TracerAdapterFactory tracerAdapterFactory) {
+	public String print(AbstractTracerAdapterFactory tracerAdapterFactory) {
 
 		try {
 			if (tracerAdapterFactory.params != null && tracerAdapterFactory.params.length >= 2 && tracerAdapterFactory.params[1] instanceof HttpUriRequest) {

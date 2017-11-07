@@ -27,9 +27,9 @@ public class SpringMVCTransformer extends AbstractTransformer implements SpringM
 
 	private void addPackageImport() {
 		try {
-			// classPool.importPackage("org.springframework.web.bind.annotation.RestController");
-			// classPool.importPackage("org.springframework.stereotype.Controller");
-			// classPool.importPackage("org.springframework.web.bind.annotation.RequestMapping");
+			// CLASS_POOL.importPackage("org.springframework.web.bind.annotation.RestController");
+			// CLASS_POOL.importPackage("org.springframework.stereotype.Controller");
+			// CLASS_POOL.importPackage("org.springframework.web.bind.annotation.RequestMapping");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -38,7 +38,7 @@ public class SpringMVCTransformer extends AbstractTransformer implements SpringM
 	private void initTtraceClzMap() {
 
 	}
-
+	@Override
 	public boolean check(String fixedClassName, CtClass clazz) throws Exception, Throwable {
 
 		if (fixedClassName.startsWith("com.feng")) {
@@ -62,14 +62,14 @@ public class SpringMVCTransformer extends AbstractTransformer implements SpringM
 
 		return false;
 	}
-
+	@Override
 	public byte[] transform(ClassLoader classLoader, String className, Class<?> clazz, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
 
 		CtClass classToBeModified = null;
 		try {
 			String fixedClassName = className.replace("/", ".");
 
-			classToBeModified = classPool.get(fixedClassName);
+			classToBeModified = CLASS_POOL.get(fixedClassName);
 
 			if (checkAndCatchException(fixedClassName, classToBeModified)) {
 
@@ -84,13 +84,13 @@ public class SpringMVCTransformer extends AbstractTransformer implements SpringM
 						if (annotations[i].toString().startsWith("@org.springframework.web.bind.annotation.RequestMapping(")) {
 
 							// 运行前处理
-							ctMethod.insertBefore(sauron_code_before_method_execute(TRACERNAME_STRING, fixedClassName, ctMethod.getLongName(), sourceAppName, true));
+							ctMethod.insertBefore(sauronCodeBeforeMethodExecute(TRACERNAME_STRING, fixedClassName, ctMethod.getLongName(), sourceAppName, true));
 							// 正常成功后处理
-							ctMethod.insertAfter(sauron_code_after_method_execute(fixedClassName, ctMethod.getLongName()), false);
+							ctMethod.insertAfter(sauronCodeAfterMethodExecute(fixedClassName, ctMethod.getLongName()), false);
 							// 异常捕捉处理
-							ctMethod.addCatch(sauron_code_catch_method_execute(fixedClassName, ctMethod.getLongName()), classPool.getCtClass("java.lang.Exception"));
+							ctMethod.addCatch(sauronCodeCatchMethodExecute(fixedClassName, ctMethod.getLongName()), CLASS_POOL.getCtClass("java.lang.Exception"));
 							// catch后的finally段处理
-							ctMethod.insertAfter(sauron_code_after_method_execute_finally(fixedClassName, ctMethod.getLongName()), true);
+							ctMethod.insertAfter(sauronCodeAfterMethodExecuteFinally(fixedClassName, ctMethod.getLongName()), true);
 
 							break;
 						}

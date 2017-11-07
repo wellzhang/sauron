@@ -141,7 +141,6 @@ public class StringMaker {
 
     public StringMaker before(char ch1, char ch2) {
         int index = indexOf(ch1, ch2);
-//        int index = indexing.indexOf(ch1, begin);
 
         if (index < 0 || index > end) {
             return this;
@@ -373,6 +372,7 @@ public class StringMaker {
      *
      * @return value() String
      */
+    @Override
     public String toString() {
         return value();
     }

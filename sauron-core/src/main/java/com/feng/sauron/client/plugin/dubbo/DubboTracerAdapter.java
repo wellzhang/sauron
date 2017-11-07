@@ -3,11 +3,11 @@ package com.feng.sauron.client.plugin.dubbo;
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.rpc.Invocation;
 import com.alibaba.dubbo.rpc.Invoker;
-import com.feng.sauron.client.plugin.TracerAdapterFactory;
+import com.feng.sauron.client.plugin.AbstractTracerAdapterFactory;
 import com.feng.sauron.tracer.Tracer;
-import com.feng.sauron.tracerImpl.TimerTracer;
+import com.feng.sauron.tracer.impl.TimerTracer;
 
-public class DubboTracerAdapter extends TracerAdapterFactory implements DubboTracerName {
+public class DubboTracerAdapter extends AbstractTracerAdapterFactory implements DubboTracerName {
 
 	public DubboTracerAdapter() {
 	}

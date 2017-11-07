@@ -30,7 +30,7 @@ public class CallbackRedefineClasse {
 
     private static class CallbackInnerClass {
 
-        private static final ClassPool classPool = ClassPool.getDefault();
+        private static final ClassPool CLASS_POOL = ClassPool.getDefault();
         private static final CallbackRedefineClasse JVM_MONITOR = new CallbackRedefineClasse();
     }
 
@@ -98,9 +98,9 @@ public class CallbackRedefineClasse {
 
         try {
 
-            CallbackInnerClass.classPool.insertClassPath(new ClassClassPath(class1.getClass()));
+            CallbackInnerClass.CLASS_POOL.insertClassPath(new ClassClassPath(class1.getClass()));
 
-            CtClass ctClass = CallbackInnerClass.classPool.get(class1.getName());
+            CtClass ctClass = CallbackInnerClass.CLASS_POOL.get(class1.getName());
 
             if (class1.getName().contains("javassist")) {
                 return;
@@ -140,7 +140,7 @@ public class CallbackRedefineClasse {
             e.printStackTrace();
         } finally {
             try {
-                CallbackInnerClass.classPool.removeClassPath(new ClassClassPath(class1.getClass()));
+                CallbackInnerClass.CLASS_POOL.removeClassPath(new ClassClassPath(class1.getClass()));
             } catch (Exception e) {
                 e.printStackTrace();
             }

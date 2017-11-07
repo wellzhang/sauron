@@ -2,9 +2,8 @@ package com.feng.sauron.utils;
 
 import java.nio.charset.Charset;
 
+import com.feng.sauron.client.plugin.AbstractTracerAdapterFactory;
 import org.slf4j.LoggerFactory;
-
-import com.feng.sauron.client.plugin.TracerAdapterFactory;
 
 import ch.qos.logback.classic.AsyncAppender;
 import ch.qos.logback.classic.Level;
@@ -33,7 +32,7 @@ public class LogBackUtils {
 			loggerContext = new LoggerContext();
 		}
 
-		Logger tracerAdapter = loggerContext.getLogger(TracerAdapterFactory.class);
+		Logger tracerAdapter = loggerContext.getLogger(AbstractTracerAdapterFactory.class);
 		tracerAdapter.detachAndStopAllAppenders();
 
 		// appender

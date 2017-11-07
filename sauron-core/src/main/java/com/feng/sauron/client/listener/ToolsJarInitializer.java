@@ -10,7 +10,7 @@ import java.net.URLClassLoader;
  * @author wei.wang@fengjr.com
  * @version 2015年11月15日 上午10:19:54
  */
-public class SauronInitializer {
+public class ToolsJarInitializer {
 
 
     public static void init() throws Throwable {

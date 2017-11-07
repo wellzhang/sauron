@@ -4,11 +4,11 @@ import java.net.URI;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.feng.sauron.client.plugin.TracerAdapterFactory;
+import com.feng.sauron.client.plugin.AbstractTracerAdapterFactory;
 import com.feng.sauron.tracer.Tracer;
-import com.feng.sauron.tracerImpl.TimerTracer;
+import com.feng.sauron.tracer.impl.TimerTracer;
 
-public class SpringTracerAdapter extends TracerAdapterFactory implements Tracer, SpringTracerName {
+public class SpringTracerAdapter extends AbstractTracerAdapterFactory implements Tracer, SpringTracerName {
 
 	public SpringTracerAdapter() {
 	}

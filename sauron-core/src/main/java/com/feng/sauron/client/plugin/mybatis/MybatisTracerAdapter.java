@@ -1,10 +1,10 @@
 package com.feng.sauron.client.plugin.mybatis;
 
-import com.feng.sauron.client.plugin.TracerAdapterFactory;
+import com.feng.sauron.client.plugin.AbstractTracerAdapterFactory;
 import com.feng.sauron.tracer.Tracer;
-import com.feng.sauron.tracerImpl.TimerTracer;
+import com.feng.sauron.tracer.impl.TimerTracer;
 
-public class MybatisTracerAdapter extends TracerAdapterFactory implements MybatisTracerName {
+public class MybatisTracerAdapter extends AbstractTracerAdapterFactory implements MybatisTracerName {
 
 	public MybatisTracerAdapter() {
 	}

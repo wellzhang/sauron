@@ -29,9 +29,9 @@ public class PreProcessTransformer implements ClassFileTransformer {
 
 			byteArrayClassPath = new ByteArrayClassPath(fixedClassName, classfileBuffer);
 
-			AbstractTransformer.classPool.insertClassPath(byteArrayClassPath);
+			AbstractTransformer.CLASS_POOL.insertClassPath(byteArrayClassPath);
 
-			CtClass classToBeModified = AbstractTransformer.classPool.get(fixedClassName);
+			CtClass classToBeModified = AbstractTransformer.CLASS_POOL.get(fixedClassName);
 
 			if (classToBeModified == null) {
 				return null;
@@ -68,7 +68,7 @@ public class PreProcessTransformer implements ClassFileTransformer {
 		} finally {
 			if (byteArrayClassPath != null) {
 				try {
-					AbstractTransformer.classPool.removeClassPath(byteArrayClassPath);
+					AbstractTransformer.CLASS_POOL.removeClassPath(byteArrayClassPath);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

@@ -32,7 +32,7 @@ public class SauronAgent {
 
             inst.addTransformer(new PreProcessTransformer());
 
-            Switch.flag.set(false);
+            Switch.FLAG.set(false);
 
             // CopyOfRedefineClasse.run();
 

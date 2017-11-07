@@ -69,7 +69,7 @@
 <!-- 		<property name="plugins" ref="mybatisInterceptor" /> -->
 	</bean>
 	
-<!-- 	<bean id="mybatisInterceptor" class="com.feng.sauron.tracerImpl.test.TestInterceptor"/> -->
+<!-- 	<bean id="mybatisInterceptor" class="com.feng.sauron.impl.test.TestInterceptor"/> -->
 
 	<bean id="daoMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="com.feng.sauron.warning.dao" />

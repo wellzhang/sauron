@@ -1,9 +1,9 @@
 package com.feng.sauron.client.plugin.local.annotation;
 
-import com.feng.sauron.client.plugin.TracerAdapterFactory;
-import com.feng.sauron.tracerImpl.TimerTracer;
+import com.feng.sauron.client.plugin.AbstractTracerAdapterFactory;
+import com.feng.sauron.tracer.impl.TimerTracer;
 
-public class AnnotationTracerAdapter extends TracerAdapterFactory implements AnnotationTracerName {
+public class AnnotationTracerAdapter extends AbstractTracerAdapterFactory implements AnnotationTracerName {
 
 	public AnnotationTracerAdapter() {
 	}
@@ -19,7 +19,7 @@ public class AnnotationTracerAdapter extends TracerAdapterFactory implements Ann
 		this.params = params;
 		this.tracerPool.put(TimerTracer.class.getName(), new TimerTracer());
 	}
-
+	@Override
 	public AnnotationTracerAdapter getAdapter(String spanId, String className, String methodName, String sourceAppName, Class<?>[] paramClazz, Object[] params) {
 		return new AnnotationTracerAdapter(spanId, className, methodName, sourceAppName, paramClazz, params);
 	}

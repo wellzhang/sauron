@@ -15,7 +15,7 @@ public final class Constants {
 	public static String SAURON_TRACERS = "sauron-tracers";
 	public static String SAURON_SAMPLING_RATE = "sauron-samplingrate";
 	public static String SAURON_DEFAULT_SAMPLING_RATE = "100";
-	public static String SAURON_DEFAULT_SAURON_TRACERS = "com.feng.sauron.tracerImpl.TimerTracer";
+	public static String SAURON_DEFAULT_SAURON_TRACERS = "TimerTracer";
 	public static String SAURON_SWITCH = "sauron-switch";
 	public static String SAURON_SWITCH_STATUS_ON = "ON";
 	public static String SAURON_SWITCH_STATUS_OFF = "OFF";

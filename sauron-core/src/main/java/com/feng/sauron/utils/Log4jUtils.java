@@ -1,12 +1,12 @@
 package com.feng.sauron.utils;
 
+import com.feng.sauron.client.plugin.AbstractTracerAdapterFactory;
 import org.apache.log4j.AsyncAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.RollingFileAppender;
 
-import com.feng.sauron.client.plugin.TracerAdapterFactory;
 import com.feng.sauron.config.SauronConfig;
 
 /**
@@ -18,7 +18,7 @@ public class Log4jUtils {
 
 	private Log4jUtils() {
 
-		Logger logger = Logger.getLogger(TracerAdapterFactory.class); // 生成新的Logger
+		Logger logger = Logger.getLogger(AbstractTracerAdapterFactory.class); // 生成新的Logger
 
 		logger.removeAllAppenders(); // 清空Appender，特別是不想使用现存实例时一定要初始化
 
@@ -34,7 +34,7 @@ public class Log4jUtils {
 
 		appender.setLayout(layout);
 
-		appender.setFile("/export/log/flume-agent/sauron/metrics." + SauronConfig.getAPP_NAME() + "_" + SauronUtils.getPid() + ".log"); // log输出路径
+		appender.setFile("/export/log/flume-agent/sauron/metrics." + SauronConfig.getAppName() + "_" + SauronUtils.getPid() + ".log"); // log输出路径
 
 		appender.setEncoding("UTF-8"); // log的字符编码
 

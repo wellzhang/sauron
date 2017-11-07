@@ -9,7 +9,7 @@ import com.alibaba.dubbo.rpc.Result;
 import com.alibaba.dubbo.rpc.RpcContext;
 import com.alibaba.dubbo.rpc.RpcException;
 import com.feng.sauron.client.context.SauronSessionContext;
-import com.feng.sauron.client.plugin.TracerAdapterFactory;
+import com.feng.sauron.client.plugin.AbstractTracerAdapterFactory;
 import com.feng.sauron.config.SauronConfig;
 import com.feng.sauron.tracer.Tracer;
 
@@ -51,15 +51,15 @@ public class DubboTransformer implements Filter, DubboTracerName {
 				SauronSessionContext.initSessionContext();
 			}
 
-			SauronSessionContext.allocCurrentTracerAdapter(TRACERNAME_STRING, className, methodName, SauronConfig.getAPP_NAME(), parameterTypes, paramVal);
+			SauronSessionContext.allocCurrentTracerAdapter(TRACERNAME_STRING, className, methodName, SauronConfig.getAppName(), parameterTypes, paramVal);
 			SauronSessionContext.getCurrentTracerAdapter().beforeMethodExecute();
 
 			String traceId = SauronSessionContext.getTraceId();
 
-			String spanId = ((TracerAdapterFactory) SauronSessionContext.getCurrentTracerAdapter()).getSpanId();
-			String nextSpanCount = ((TracerAdapterFactory) SauronSessionContext.getCurrentTracerAdapter()).getNextSpanCount();
+			String spanId = ((AbstractTracerAdapterFactory) SauronSessionContext.getCurrentTracerAdapter()).getSpanId();
+			String nextSpanCount = ((AbstractTracerAdapterFactory) SauronSessionContext.getCurrentTracerAdapter()).getNextSpanCount();
 
-			RpcContext.getContext().setAttachment(tracerStackString, traceId + "_" + spanId + "." + nextSpanCount + "_" + SauronConfig.getAPP_NAME());
+			RpcContext.getContext().setAttachment(tracerStackString, traceId + "_" + spanId + "." + nextSpanCount + "_" + SauronConfig.getAppName());
 
 		} catch (Exception e1) {
 			e1.printStackTrace();
@@ -122,7 +122,7 @@ public class DubboTransformer implements Filter, DubboTracerName {
 
 			Object[] paramVal = new Object[] { invoker, invocation };
 
-			Tracer adapter = TracerAdapterFactory.get(TRACERNAME_STRING, spanid, className, methodName, sourceAppName, parameterTypes, paramVal);
+			Tracer adapter = AbstractTracerAdapterFactory.get(TRACERNAME_STRING, spanid, className, methodName, sourceAppName, parameterTypes, paramVal);
 
 			SauronSessionContext.addTracerAdapter(adapter);
 			SauronSessionContext.getCurrentTracerAdapter().beforeMethodExecute();

@@ -7,15 +7,33 @@ package com.feng.sauron.tracer;
 
 public interface Tracer {
 
+    /**
+     *
+     */
     void beforeMethodExecute();
 
+    /**
+     *
+     */
     void afterMethodExecute();
 
+    /**
+     *
+     */
     void catchMethodException(Exception ex);
 
+    /**
+     *
+     */
     void catchMethodExceptionFinally();
 
+    /**
+     *
+     */
     void catchMethodExceptionFinally(Class<?> returnType, Object returnValue);
 
+    /**
+     *
+     */
     String printTraceLog();
 }

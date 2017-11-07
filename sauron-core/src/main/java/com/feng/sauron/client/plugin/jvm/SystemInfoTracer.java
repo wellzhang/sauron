@@ -23,7 +23,7 @@ import com.sun.tools.attach.VirtualMachine;
  */
 public class SystemInfoTracer {
 
-	// public final static Logger logger = LoggerFactory.getLogger(TracerAdapterFactory.class);//当 当前系统使用的环境为 logback 的时候使用
+	// public final static Logger logger = LoggerFactory.getLogger(AbstractTracerAdapterFactory.class);//当 当前系统使用的环境为 logback 的时候使用
 	public final static Logger logger = SauronLogUtils.getSauronLogger();// 万能用法
 
 	private SystemInfoTracer() {
@@ -90,7 +90,7 @@ public class SystemInfoTracer {
 
 			HashMap<String, Object> hashMap = new HashMap<>();
 
-			hashMap.put("appName", SauronConfig.getAPP_NAME());
+			hashMap.put("appName", SauronConfig.getAppName());
 
 			hashMap.put("pid", SauronUtils.getPid());
 

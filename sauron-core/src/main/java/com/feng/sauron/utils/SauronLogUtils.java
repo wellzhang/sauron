@@ -4,7 +4,7 @@ import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.feng.sauron.client.plugin.TracerAdapterFactory;
+import com.feng.sauron.client.plugin.AbstractTracerAdapterFactory;
 
 /**
  * @author wei.wang@fengjr.com
@@ -37,7 +37,7 @@ public class SauronLogUtils {
 			LogBackUtils.run();
 		}
 
-		this.sauronLogger = LoggerFactory.getLogger(TracerAdapterFactory.class);
+		this.sauronLogger = LoggerFactory.getLogger(AbstractTracerAdapterFactory.class);
 
 		System.out.println(sauronLogger);
 

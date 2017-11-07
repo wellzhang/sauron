@@ -1,14 +1,14 @@
 package com.feng.sauron.client.plugin.mysql;
 
-import com.feng.sauron.client.plugin.TracerAdapterFactory;
+import com.feng.sauron.client.plugin.AbstractTracerAdapterFactory;
 import com.feng.sauron.tracer.Tracer;
-import com.feng.sauron.tracerImpl.TimerTracer;
+import com.feng.sauron.tracer.impl.TimerTracer;
 import com.feng.sauron.utils.StringMaker;
 
 /**
  * Created by lianbin.wang on 11/4/16.
  */
-public class MysqlTracerAdapter extends TracerAdapterFactory implements MysqlTracerName {
+public class MysqlTracerAdapter extends AbstractTracerAdapterFactory implements MysqlTracerName {
 
 	public MysqlTracerAdapter() {
 	}

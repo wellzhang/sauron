@@ -11,7 +11,7 @@ import com.feng.sauron.client.plugin.mybatis.interceptor.MybatisInterceptorTrans
 import com.feng.sauron.client.plugin.mysql.MysqlTracerName;
 import com.feng.sauron.client.plugin.mysql.MysqlTransformer;
 import com.feng.sauron.client.plugin.redis.JedisTransformer;
-import com.feng.sauron.client.plugin.rocketmq.RocketMQProducerTransformer;
+import com.feng.sauron.client.plugin.rocketmq.RocketMqProducerTransformer;
 import com.feng.sauron.client.plugin.spring.mvc.SpringMVCTransformer;
 
 /**
@@ -44,7 +44,7 @@ public class TransformerFactory {
 			hashMap.put(HttpClient4Transformer.TRACERNAME_STRING, HttpClient4Transformer.class.newInstance());
 
 			// rocketmq
-			hashMap.put(RocketMQProducerTransformer.TRACERNAME_STRING, RocketMQProducerTransformer.class.newInstance());
+			hashMap.put(RocketMqProducerTransformer.TRACERNAME_STRING, RocketMqProducerTransformer.class.newInstance());
 
 			// jdbc
 			hashMap.put(MysqlTracerName.TRACERNAME_STRING, MysqlTransformer.class.newInstance());

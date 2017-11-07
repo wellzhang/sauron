@@ -33,8 +33,8 @@ public class JdkHttpClientTransformer extends AbstractTransformer implements Jdk
 
 	private void addPackageImport() {
 		// try {
-		// classPool.importPackage(SauronSessionContext.class.getName());
-		// classPool.importPackage("sun.net.www.protocol.http.HttpURLConnection");
+		// CLASS_POOL.importPackage(SauronSessionContext.class.getName());
+		// CLASS_POOL.importPackage("sun.net.www.protocol.http.HttpURLConnection");
 		// } catch (Exception e) {
 		// e.printStackTrace();
 		// }
@@ -64,18 +64,18 @@ public class JdkHttpClientTransformer extends AbstractTransformer implements Jdk
 		initTtraceClzMap();
 		return traceClzMap;
 	}
-
+	@Override
 	public boolean check(String fixedClassName, CtClass clazz) {
 		return traceClzMap.containsKey(fixedClassName);
 	}
-
+	@Override
 	public byte[] transform(ClassLoader classLoader, String className, Class<?> clazz, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
 
 		CtClass classToBeModified = null;
 		try {
 			String fixedClassName = className.replace("/", ".");
 
-			classToBeModified = classPool.get(fixedClassName);
+			classToBeModified = CLASS_POOL.get(fixedClassName);
 
 			if (check(fixedClassName, classToBeModified)) {
 
@@ -107,9 +107,6 @@ public class JdkHttpClientTransformer extends AbstractTransformer implements Jdk
 				return classToBeModified.toBytecode();
 			}
 		} catch (NotFoundException e) {
-			// e.printStackTrace();
-			// 去掉类找不到时的报错，避免对输出过多错误。
-			// 找不到的一般都是lib或虚拟机自身不存在的类，比如自动代理出的类 不用处理
 		} catch (Exception e) {
 			logger.error("transform Exception ", e);
 		} finally {

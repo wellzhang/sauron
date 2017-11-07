@@ -1,11 +1,12 @@
-package com.feng.sauron.tracerImpl;
+package com.feng.sauron.tracer.impl;
 
 import java.util.HashMap;
+import java.util.Stack;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.feng.sauron.client.plugin.TracerAdapterFactory;
+import com.feng.sauron.client.plugin.AbstractTracerAdapterFactory;
 import com.feng.sauron.config.SauronConfig;
 import com.feng.sauron.utils.IdUtils;
 import com.feng.sauron.utils.JsonUtils;
@@ -15,42 +16,56 @@ import com.feng.sauron.utils.JsonUtils;
  * @version 2015年5月3日 下午4:18:38
  * 
  */
-@Deprecated
-public class SauronTracerByMap {
+public class SauronTracer {
 
-	private final static Logger logger = LoggerFactory.getLogger(TracerAdapterFactory.class);// 要使用TracerAdapterFactory 的 logger
+	private final static Logger logger = LoggerFactory.getLogger(AbstractTracerAdapterFactory.class);// 要使用TracerAdapterFactory 的 logger
 
-	private final static ThreadLocal<HashMap<String, TimerTracer>> tracers = new ThreadLocal<HashMap<String, TimerTracer>>();
+	private final static ThreadLocal<Stack<TimerTracer>> TRACERS = new ThreadLocal<Stack<TimerTracer>>();
 
-	static {
-		HashMap<String, TimerTracer> hashMap = tracers.get();
-		if (hashMap == null) {
-			tracers.set(new HashMap<String, TimerTracer>());
-		}
+	private SauronTracer() {
 	}
 
-	private SauronTracerByMap() {
-	}
-
+	/*
+	 * key 仅用来对照 是否匹配,不参与最终逻辑，
+	 */
 	public static void start(String key) {
 
 		try {
 			TimerTracer timerTracer = new TimerTracer();
 			timerTracer.startTimer();
 
-			HashMap<String, TimerTracer> hashMap = new HashMap<String, TimerTracer>();
-			hashMap.put(key, timerTracer);
-			tracers.set(hashMap);
+			Stack<TimerTracer> stack = new Stack<TimerTracer>();
+			stack.push(timerTracer);
+			TRACERS.set(stack);
+
+		} catch (Exception e) {
+			System.err.println("SauronTracer.start exception ...");
+		}
+	}
+
+	/*
+	 * key 仅用来对照 是否匹配,不参与最终逻辑，
+	 */
+	public static void start() {
+
+		try {
+			TimerTracer timerTracer = new TimerTracer();
+			timerTracer.startTimer();
+
+			Stack<TimerTracer> stack = new Stack<TimerTracer>();
+			stack.push(timerTracer);
+			TRACERS.set(stack);
+
 		} catch (Exception e) {
 			System.err.println("SauronTracer.start exception ...");
 		}
 
 	}
 
-	public static void end(String key, String result, boolean isSuccess) {
+	public static void end(String key, String result, boolean isSuccess) {// 就近匹配，不考虑用户 start 中key 是否匹配， start 中的key 仅用来对照 是否匹配
 
 		try {
-			if (tracers.get().isEmpty()) {
+			if (TRACERS.get().isEmpty()) {
 				System.err.println("SauronTracer.end 方法需要和SauronTracer.start() 配合使用... ");
 				return;
 			}
@@ -60,11 +75,11 @@ public class SauronTracerByMap {
 				return;
 			}
 
-			TimerTracer timerTracer = tracers.get().get(key);
+			TimerTracer pop = TRACERS.get().pop();
 
-			timerTracer.stopTimer();
+			pop.stopTimer();
 
-			String printTraceLog = timerTracer.printTraceLog();
+			String printTraceLog = pop.printTraceLog();
 
 			StackTraceElement stackTraceElement = Thread.currentThread().getStackTrace()[2];
 
@@ -106,6 +121,7 @@ public class SauronTracerByMap {
 			String tracerid = IdUtils.getInstance().nextId();
 
 			if (key == null || "".equals(key)) {
+
 				key = stackTraceElement.getMethodName();
 			}
 
@@ -125,7 +141,7 @@ public class SauronTracerByMap {
 
 		sb.append("{\"sauron\":{");
 
-		sb.append("\"AppName\":\"").append(SauronConfig.getAPP_NAME()).append("\"");
+		sb.append("\"AppName\":\"").append(SauronConfig.getAppName()).append("\"");
 		sb.append(",");
 		sb.append("\"Traceid\":\"").append(tracerid).append("\"");
 		sb.append(",");
@@ -154,7 +170,7 @@ public class SauronTracerByMap {
 
 		sb.append("{\"sauron\":{");
 
-		sb.append("\"AppName\":\"").append(SauronConfig.getAPP_NAME()).append("\"");
+		sb.append("\"AppName\":\"").append(SauronConfig.getAppName()).append("\"");
 		sb.append(",");
 		sb.append("\"Traceid\":\"").append(tracerid).append("\"");
 		sb.append(",");
@@ -177,19 +193,19 @@ public class SauronTracerByMap {
 
 	public static void main(String[] args) {
 		try {
-			SauronTracerByMap.start("key1");
+			SauronTracer.start("key1");
 			Thread.sleep(2000L);
 
-			SauronTracerByMap.start("key2");
+			SauronTracer.start("key2");
 
 			Thread.sleep(3000L);
 
 			HashMap<String, Object> sauron = new HashMap<>();
 			sauron.put("errorCode\"\"\"", 1);
 			String json = JsonUtils.toJSon(sauron);
-			SauronTracerByMap.end("key1", json, true);
+			SauronTracer.end("key1", json, true);
 
-			SauronTracerByMap.end("key2", json, true);
+			SauronTracer.end("key2", json, true);
 
 		} catch (Exception e) {
 			e.printStackTrace();

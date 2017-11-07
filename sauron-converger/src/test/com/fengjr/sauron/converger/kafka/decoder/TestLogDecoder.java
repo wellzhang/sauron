@@ -36,7 +36,7 @@ public class TestLogDecoder extends BaseTest {
 
     @Test
     public void testCodeBulkAlarmMsg(){
-        String line = "host1|2016-05-19 14:50:25|alarm|v3|{\"sauron\":{\"appName\":\"sauron\",\"traceId\":\"1478691865367^0989096d96e48\",\"key\":\"key2\",\"methodName\":\"com.feng.sauron.tracerImpl.SauronTracerByMap.main\",\"time\":\"1463539002486\",\"lineNumber\":\"188\",\"Result\":\"ecception:error\"}}";
+        String line = "host1|2016-05-19 14:50:25|alarm|v3|{\"sauron\":{\"appName\":\"sauron\",\"traceId\":\"1478691865367^0989096d96e48\",\"key\":\"key2\",\"methodName\":\"com.feng.sauron.impl.SauronTracerByMap.main\",\"time\":\"1463539002486\",\"lineNumber\":\"188\",\"Result\":\"ecception:error\"}}";
         try {
             logMsgDecoder.decodeMsg(line);
         } catch (ParseException e) {
@@ -48,7 +48,7 @@ public class TestLogDecoder extends BaseTest {
 
     @Test
     public void testCodeBulkMsg(){
-        String line = "host1|2016-05-19 10:33:25|codeBulk|v3|{\"sauron\":{\"appName\":\"sauron\",\"traceId\":\"1478691865367^0989096d96e48\",\"key\":\"key1\",\"methodName\":\"com.feng.sauron.tracerImpl.SauronTracer.main\",\"tracer\":{\"duration\":\"3174ms\"},\"lineNumber\":\"200\",\"result\":\"{errorCode:1}\",\"isSuccess\":\"0\"}}";
+        String line = "host1|2016-05-19 10:33:25|codeBulk|v3|{\"sauron\":{\"appName\":\"sauron\",\"traceId\":\"1478691865367^0989096d96e48\",\"key\":\"key1\",\"methodName\":\"com.feng.sauron.impl.SauronTracer.main\",\"tracer\":{\"duration\":\"3174ms\"},\"lineNumber\":\"200\",\"result\":\"{errorCode:1}\",\"isSuccess\":\"0\"}}";
         try {
             logMsgDecoder.decodeMsg(line);
         } catch (ParseException e) {

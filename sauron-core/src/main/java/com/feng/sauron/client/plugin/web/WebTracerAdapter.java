@@ -1,11 +1,11 @@
 package com.feng.sauron.client.plugin.web;
 
-import com.feng.sauron.client.plugin.TracerAdapterFactory;
+import com.feng.sauron.client.plugin.AbstractTracerAdapterFactory;
 import com.feng.sauron.client.plugin.web.printlog.WebPrintLog;
 import com.feng.sauron.tracer.Tracer;
-import com.feng.sauron.tracerImpl.TimerTracer;
+import com.feng.sauron.tracer.impl.TimerTracer;
 
-public class WebTracerAdapter extends TracerAdapterFactory implements Tracer, WebTracerName {
+public class WebTracerAdapter extends AbstractTracerAdapterFactory implements Tracer, WebTracerName {
 
 	public WebTracerAdapter() {
 	}

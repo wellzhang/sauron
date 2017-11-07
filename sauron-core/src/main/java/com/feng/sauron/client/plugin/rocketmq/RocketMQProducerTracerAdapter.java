@@ -6,16 +6,16 @@ import org.slf4j.LoggerFactory;
 import com.alibaba.rocketmq.client.producer.SendResult;
 import com.alibaba.rocketmq.common.message.Message;
 import com.feng.sauron.client.context.SauronSessionContext;
-import com.feng.sauron.client.plugin.TracerAdapterFactory;
+import com.feng.sauron.client.plugin.AbstractTracerAdapterFactory;
 import com.feng.sauron.config.SauronConfig;
 import com.feng.sauron.tracer.Tracer;
-import com.feng.sauron.tracerImpl.TimerTracer;
+import com.feng.sauron.tracer.impl.TimerTracer;
 import com.feng.sauron.utils.Constants;
 
 /**
  * Created by lianbin.wang on 11/2/16.
  */
-public class RocketMQProducerTracerAdapter extends TracerAdapterFactory implements RocketMQProducerTracerName {
+public class RocketMQProducerTracerAdapter extends AbstractTracerAdapterFactory implements RocketMQProducerTracerName {
 	private static final Logger logger = LoggerFactory.getLogger(RocketMQProducerTracerAdapter.class);// 此logger 只能打印 本类普通log ，不能用于打印sauron log， 需使用父类的logger 打印
 
 	public RocketMQProducerTracerAdapter() {
@@ -51,7 +51,7 @@ public class RocketMQProducerTracerAdapter extends TracerAdapterFactory implemen
 
 				message.putUserProperty(Constants.SAURON_REQUEST_TRACEID, SauronSessionContext.getTraceId());
 				message.putUserProperty(Constants.SAURON_REQUEST_SPANID, getNextSpanId());
-				message.putUserProperty(Constants.SAURON_REQUEST_SOURCE_APPNAME, SauronConfig.getAPP_NAME());
+				message.putUserProperty(Constants.SAURON_REQUEST_SOURCE_APPNAME, SauronConfig.getAppName());
 			}
 		} catch (Exception e) {
 			logger.debug("error setting property into mq message, ", e.getMessage(), e);

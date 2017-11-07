@@ -7,6 +7,11 @@ package com.feng.sauron.client.plugin;
  */
 public interface PrintTraceLog {
 
-	public String print(TracerAdapterFactory tracerAdapterFactory);
+	/**
+	 *
+	 * @param tracerAdapterFactory
+	 * @return
+	 */
+	public String print(AbstractTracerAdapterFactory tracerAdapterFactory);
 
 }

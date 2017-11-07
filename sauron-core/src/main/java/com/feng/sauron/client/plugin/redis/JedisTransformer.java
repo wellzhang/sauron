@@ -68,18 +68,18 @@ public class JedisTransformer extends AbstractTransformer implements JedisTracer
 		initTtraceClzMap();
 		return traceClzMap;
 	}
-
+	@Override
 	public boolean check(String fixedClassName, CtClass clazz) {
 		return traceClzMap.containsKey(fixedClassName);
 	}
-
+	@Override
 	public byte[] transform(ClassLoader classLoader, String className, Class<?> clazz, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
 
 		CtClass classToBeModified = null;
 		try {
 			String fixedClassName = className.replace("/", ".");
 
-			classToBeModified = classPool.get(fixedClassName);
+			classToBeModified = CLASS_POOL.get(fixedClassName);
 
 			if (checkAndCatchException(fixedClassName, classToBeModified)) {
 
@@ -90,13 +90,13 @@ public class JedisTransformer extends AbstractTransformer implements JedisTracer
 					String longName = ctConstructor.getLongName();
 
 					// 运行前处理
-					ctConstructor.insertBefore(sauron_code_before_method_execute(TRACERNAME_STRING, fixedClassName, longName, sourceAppName, true));
+					ctConstructor.insertBefore(sauronCodeBeforeMethodExecute(TRACERNAME_STRING, fixedClassName, longName, sourceAppName, true));
 					// 正常成功后处理
-					ctConstructor.insertAfter(sauron_code_after_method_execute(fixedClassName, longName), false);
+					ctConstructor.insertAfter(sauronCodeAfterMethodExecute(fixedClassName, longName), false);
 					// 异常捕捉处理
-					ctConstructor.addCatch(sauron_code_catch_method_execute(fixedClassName, longName), classPool.getCtClass("java.lang.Exception"));
+					ctConstructor.addCatch(sauronCodeCatchMethodExecute(fixedClassName, longName), CLASS_POOL.getCtClass("java.lang.Exception"));
 					// catch后的finally段处理
-					ctConstructor.insertAfter(sauron_code_after_method_execute_finally(fixedClassName, longName), true);
+					ctConstructor.insertAfter(sauronCodeAfterMethodExecuteFinally(fixedClassName, longName), true);
 
 				}
 
@@ -118,21 +118,18 @@ public class JedisTransformer extends AbstractTransformer implements JedisTracer
 						String methodName = ctMethod.getLongName();
 
 						// 运行前处理
-						ctMethod.insertBefore(sauron_code_before_method_execute(TRACERNAME_STRING, fixedClassName, methodName, sourceAppName, true));
+						ctMethod.insertBefore(sauronCodeBeforeMethodExecute(TRACERNAME_STRING, fixedClassName, methodName, sourceAppName, true));
 						// 正常成功后处理
-						ctMethod.insertAfter(sauron_code_after_method_execute(fixedClassName, methodName), false);
+						ctMethod.insertAfter(sauronCodeAfterMethodExecute(fixedClassName, methodName), false);
 						// 异常捕捉处理
-						ctMethod.addCatch(sauron_code_catch_method_execute(fixedClassName, methodName), classPool.getCtClass("java.lang.Exception"));
+						ctMethod.addCatch(sauronCodeCatchMethodExecute(fixedClassName, methodName), CLASS_POOL.getCtClass("java.lang.Exception"));
 						// catch后的finally段处理
-						ctMethod.insertAfter(sauron_code_after_method_execute_finally(fixedClassName, methodName), true);
+						ctMethod.insertAfter(sauronCodeAfterMethodExecuteFinally(fixedClassName, methodName), true);
 					}
 				}
 				return classToBeModified.toBytecode();
 			}
 		} catch (NotFoundException e) {
-			// e.printStackTrace();
-			// 去掉类找不到时的报错，避免对输出过多错误。
-			// 找不到的一般都是lib或虚拟机自身不存在的类，比如自动代理出的类 不用处理
 		} catch (Exception e) {
 			logger.error("transform Exception ", e);
 		} finally {

@@ -5,7 +5,7 @@ import java.net.URI;
 import javax.servlet.http.HttpServletRequest;
 
 import com.feng.sauron.client.plugin.PrintTraceLog;
-import com.feng.sauron.client.plugin.TracerAdapterFactory;
+import com.feng.sauron.client.plugin.AbstractTracerAdapterFactory;
 
 /**
  * @author wei.wang@fengjr.com
@@ -18,15 +18,15 @@ public class WebPrintLog implements PrintTraceLog {
 	}
 
 	private static class InnerClass {
-		private static final WebPrintLog Inner_Class = new WebPrintLog();
+		private static final WebPrintLog INSTANCE = new WebPrintLog();
 	}
 
 	public static WebPrintLog getInstances() {
-		return InnerClass.Inner_Class;
+		return InnerClass.INSTANCE;
 	}
 
 	@Override
-	public String print(TracerAdapterFactory tracerAdapterFactory) {
+	public String print(AbstractTracerAdapterFactory tracerAdapterFactory) {
 
 		try {
 

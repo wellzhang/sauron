@@ -2,11 +2,11 @@ package com.feng.sauron.client.plugin.httpclient.jdk;
 
 import java.net.URL;
 
-import com.feng.sauron.client.plugin.TracerAdapterFactory;
+import com.feng.sauron.client.plugin.AbstractTracerAdapterFactory;
 import com.feng.sauron.tracer.Tracer;
-import com.feng.sauron.tracerImpl.TimerTracer;
+import com.feng.sauron.tracer.impl.TimerTracer;
 
-public class JdkHttpClientTracerAdapter extends TracerAdapterFactory implements JdkHttpClientTracerName {
+public class JdkHttpClientTracerAdapter extends AbstractTracerAdapterFactory implements JdkHttpClientTracerName {
 
 	public JdkHttpClientTracerAdapter() {
 	}

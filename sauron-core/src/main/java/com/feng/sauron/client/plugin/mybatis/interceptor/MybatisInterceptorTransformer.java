@@ -34,10 +34,10 @@ public class MybatisInterceptorTransformer extends AbstractTransformer implement
 
 	private void addPackageImport() {
 		try {
-			classPool.importPackage(Interceptor.class.getName());
-			classPool.importPackage(AddInterceptor.class.getName());
-			classPool.importPackage(MybatisInterceptor.class.getName());
-			classPool.importPackage("org.mybatis.spring.SqlSessionFactoryBean");
+			CLASS_POOL.importPackage(Interceptor.class.getName());
+			CLASS_POOL.importPackage(AddInterceptor.class.getName());
+			CLASS_POOL.importPackage(MybatisInterceptor.class.getName());
+			CLASS_POOL.importPackage("org.mybatis.spring.SqlSessionFactoryBean");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -53,18 +53,18 @@ public class MybatisInterceptorTransformer extends AbstractTransformer implement
 			}
 		});
 	}
-
+	@Override
 	public boolean check(String fixedClassName, CtClass clazz) {
 		return traceClzMap.containsKey(fixedClassName);
 	}
-
+	@Override
 	public byte[] transform(ClassLoader classLoader, String className, Class<?> clazz, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
 
 		CtClass classToBeModified = null;
 		try {
 			String fixedClassName = className.replace("/", ".");
 
-			classToBeModified = classPool.get(fixedClassName);
+			classToBeModified = CLASS_POOL.get(fixedClassName);
 
 			if (checkAndCatchException(fixedClassName, classToBeModified)) {
 
@@ -87,9 +87,6 @@ public class MybatisInterceptorTransformer extends AbstractTransformer implement
 				return classToBeModified.toBytecode();
 			}
 		} catch (NotFoundException e) {
-			// e.printStackTrace();
-			// 去掉类找不到时的报错，避免对输出过多错误。
-			// 找不到的一般都是lib或虚拟机自身不存在的类，比如自动代理出的类 不用处理
 		} catch (Exception e) {
 			logger.error("transform  MybatisInterceptorTransformer Exception ", e);
 		} finally {

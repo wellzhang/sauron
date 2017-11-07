@@ -1,9 +1,9 @@
-package com.feng.sauron.tracerImpl;
+package com.feng.sauron.tracer.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.feng.sauron.client.plugin.TracerAdapterFactory;
+import com.feng.sauron.client.plugin.AbstractTracerAdapterFactory;
 import com.feng.sauron.utils.IdUtils;
 
 /**
@@ -13,7 +13,7 @@ import com.feng.sauron.utils.IdUtils;
  */
 public class TracerLog {
 
-	private final static Logger logger = LoggerFactory.getLogger(TracerAdapterFactory.class);// 要使用TracerAdapterFactory 的 logger
+	private final static Logger logger = LoggerFactory.getLogger(AbstractTracerAdapterFactory.class);// 要使用TracerAdapterFactory 的 logger
 
 	private TracerLog() {
 	}

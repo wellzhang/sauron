@@ -18,13 +18,13 @@ import com.feng.sauron.client.plugin.AbstractTransformer;
 /**
  * Created by lianbin.wang on 11/2/16.
  */
-public class RocketMQProducerTransformer extends AbstractTransformer implements RocketMQProducerTracerName {
-    private static final Logger logger = LoggerFactory.getLogger(RocketMQProducerTransformer.class);
+public class RocketMqProducerTransformer extends AbstractTransformer implements RocketMQProducerTracerName {
+    private static final Logger logger = LoggerFactory.getLogger(RocketMqProducerTransformer.class);
 
     private Map<String, HashSet<String>> traceClzMap = new HashMap<>();
 
 
-    public RocketMQProducerTransformer() {
+    public RocketMqProducerTransformer() {
         initTraceClzMap();
     }
 
@@ -49,7 +49,7 @@ public class RocketMQProducerTransformer extends AbstractTransformer implements 
         CtClass classToBeModified = null;
         try {
             String fixedClassName = className.replace("/", ".");
-            classToBeModified = classPool.get(fixedClassName);
+            classToBeModified = CLASS_POOL.get(fixedClassName);
 
             if (checkAndCatchException(fixedClassName, classToBeModified)) {
                 HashSet<String> methodNameSet = traceClzMap.get(fixedClassName);
@@ -72,21 +72,18 @@ public class RocketMQProducerTransformer extends AbstractTransformer implements 
 
                     if (flag) {
                         // 运行前处理
-                        ctMethod.insertBefore(sauron_code_before_method_execute(TRACERNAME_STRING, fixedClassName, methodName, sourceAppName, true));
+                        ctMethod.insertBefore(sauronCodeBeforeMethodExecute(TRACERNAME_STRING, fixedClassName, methodName, sourceAppName, true));
                         // 正常成功后处理
-                        ctMethod.insertAfter(sauron_code_after_method_execute(fixedClassName, methodName), false);
+                        ctMethod.insertAfter(sauronCodeAfterMethodExecute(fixedClassName, methodName), false);
                         // 异常捕捉处理
-                        ctMethod.addCatch(sauron_code_catch_method_execute(fixedClassName, methodName), classPool.getCtClass("java.lang.Exception"));
+                        ctMethod.addCatch(sauronCodeCatchMethodExecute(fixedClassName, methodName), CLASS_POOL.getCtClass("java.lang.Exception"));
                         // catch后的finally段处理
-                        ctMethod.insertAfter(sauron_code_after_method_execute_finally_with_return(fixedClassName, methodName), true);
+                        ctMethod.insertAfter(sauronCodeAfterMethodExecuteFinallyWithReturn(fixedClassName, methodName), true);
                     }
                 }
                 return classToBeModified.toBytecode();
             }
         } catch (NotFoundException e) {
-            // e.printStackTrace();
-            // 去掉类找不到时的报错，避免对输出过多错误。
-            // 找不到的一般都是lib或虚拟机自身不存在的类，比如自动代理出的类 不用处理
         } catch (Exception e) {
             logger.error("transform Exception ", e);
         } finally {

@@ -38,7 +38,7 @@ public class MysqlTransformer extends AbstractTransformer implements MysqlTracer
         CtClass classToBeModified = null;
         try {
             String fixedClassName = className.replace("/", ".");
-            classToBeModified = classPool.get(fixedClassName);
+            classToBeModified = CLASS_POOL.get(fixedClassName);
 
             if (checkAndCatchException(fixedClassName, classToBeModified)) {
                 CtMethod[] methods = classToBeModified.getDeclaredMethods();
@@ -46,19 +46,17 @@ public class MysqlTransformer extends AbstractTransformer implements MysqlTracer
                 for (CtMethod ctMethod : methods) {
                     String methodName = ctMethod.getLongName();
                     if (shouldWeaveMethod(fixedClassName, methodName)) {
-                        ctMethod.insertBefore(sauron_code_before_method_execute(TRACERNAME_STRING, fixedClassName, methodName, sourceAppName, true));
-                        ctMethod.insertAfter(sauron_code_after_method_execute(fixedClassName, methodName), false);
-                        ctMethod.addCatch(sauron_code_catch_method_execute(fixedClassName, methodName), classPool.getCtClass("java.lang.Exception"));
-                        ctMethod.insertAfter(sauron_code_after_method_execute_finally(fixedClassName, methodName), true);
+                        ctMethod.insertBefore(sauronCodeBeforeMethodExecute(TRACERNAME_STRING, fixedClassName, methodName, sourceAppName, true));
+                        ctMethod.insertAfter(sauronCodeAfterMethodExecute(fixedClassName, methodName), false);
+                        ctMethod.addCatch(sauronCodeCatchMethodExecute(fixedClassName, methodName), CLASS_POOL.getCtClass("java.lang.Exception"));
+                        ctMethod.insertAfter(sauronCodeAfterMethodExecuteFinally(fixedClassName, methodName), true);
                     }
                 }
 
                 return classToBeModified.toBytecode();
             }
         } catch (NotFoundException e) {
-            // e.printStackTrace();
-            // 去掉类找不到时的报错，避免对输出过多错误。
-            // 找不到的一般都是lib或虚拟机自身不存在的类，比如自动代理出的类 不用处理
+            // 去掉类找不到时的报错，避免对输出过多错误。  找不到的一般都是lib或虚拟机自身不存在的类，比如自动代理出的类 不用处理
         } catch (Exception e) {
         } finally {
             if (classToBeModified != null) {

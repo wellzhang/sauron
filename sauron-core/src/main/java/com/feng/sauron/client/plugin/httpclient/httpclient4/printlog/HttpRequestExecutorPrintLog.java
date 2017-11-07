@@ -1,7 +1,7 @@
 package com.feng.sauron.client.plugin.httpclient.httpclient4.printlog;
 
+import com.feng.sauron.client.plugin.AbstractTracerAdapterFactory;
 import com.feng.sauron.client.plugin.PrintTraceLog;
-import com.feng.sauron.client.plugin.TracerAdapterFactory;
 
 /**
  * @author wei.wang@fengjr.com
@@ -22,7 +22,7 @@ public class HttpRequestExecutorPrintLog implements PrintTraceLog {
 	}
 
 	@Override
-	public String print(TracerAdapterFactory tracerAdapterFactory) {
+	public String print(AbstractTracerAdapterFactory tracerAdapterFactory) {
 		return null;
 	}
 

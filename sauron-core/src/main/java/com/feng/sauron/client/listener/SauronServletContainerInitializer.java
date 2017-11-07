@@ -32,17 +32,17 @@ public class SauronServletContainerInitializer implements ServletContainerInitia
 
     private void init() {
 
-        if (flag.get()) {
+        if (FLAG.get()) {
 
             try {//以下每个方法的顺序不要乱动，小心死锁 ，看似不影响，其实很重要
 
-                WatchableConfigClient.getInstance().get(SauronConfig.getAPP_NAME(), "jvm-switch", "ON");
+                WatchableConfigClient.getInstance().get(SauronConfig.getAppName(), "jvm-switch", "ON");
 
-                SauronInitializer.init();
+                ToolsJarInitializer.init();
 
                 SauronLogUtils.run();// 必须在最前面
 
-                JavaAgentMain.run();
+                AgentMainInitializer.run();
 
                 SauronInstrumentation.getInstance().addTransformer(new PreProcessTransformer());
 
@@ -62,7 +62,7 @@ public class SauronServletContainerInitializer implements ServletContainerInitia
                 e.printStackTrace();
             }
 
-            flag.set(false);
+            FLAG.set(false);
         }
     }
 

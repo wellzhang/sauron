@@ -1,11 +1,11 @@
 package com.feng.sauron.client.plugin.redis;
 
-import com.feng.sauron.client.plugin.TracerAdapterFactory;
+import com.feng.sauron.client.plugin.AbstractTracerAdapterFactory;
 import com.feng.sauron.tracer.Tracer;
-import com.feng.sauron.tracerImpl.TimerTracer;
+import com.feng.sauron.tracer.impl.TimerTracer;
 import com.feng.sauron.utils.SauronUtils;
 
-public class JedisTracerAdapter extends TracerAdapterFactory implements JedisTracerName {
+public class JedisTracerAdapter extends AbstractTracerAdapterFactory implements JedisTracerName {
 
 	public JedisTracerAdapter() {
 	}

@@ -12,7 +12,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 
 import com.feng.sauron.client.context.SauronSessionContext;
-import com.feng.sauron.client.plugin.TracerAdapterFactory;
+import com.feng.sauron.client.plugin.AbstractTracerAdapterFactory;
 import com.feng.sauron.tracer.Tracer;
 import com.feng.sauron.utils.Constants;
 import com.feng.sauron.utils.IdUtils;
@@ -65,7 +65,7 @@ public class WebTransformer implements Filter, WebTracerName {
 
 			Object[] paramVal = new Object[] { httpReq };
 
-			Tracer tracer = TracerAdapterFactory.get(TRACERNAME_STRING, spanid, className, methodName, sourceAppName, parameterTypes, paramVal);
+			Tracer tracer = AbstractTracerAdapterFactory.get(TRACERNAME_STRING, spanid, className, methodName, sourceAppName, parameterTypes, paramVal);
 
 			SauronSessionContext.addTracerAdapter(tracer);
 
